@@ -1,0 +1,32 @@
+.card-bg img {
+  width: 100px;
+  padding: 15px;
+  background-color: #ca8e46;
+}
+
+/* SERVICE DETAILS */
+.menu-item-price {
+  color: #6c757d;
+}
+
+.service-details {
+  background-color: white;
+  color: black;
+}
+.service-details input[type="checkbox"] {
+  display: none;
+}
+.menu-checkbox:checked + label {
+  background-color: #9c6114; /* verde chiaro, esempio */
+  color: white; /* testo verde scuro */
+  border-radius: 4px;
+
+  display: block;
+}
+.active-menu-item {
+  background-color: #9c6114;
+  color: white;
+}
+.active-menu-item .menu-item-price {
+  color: lightgray;
+}
