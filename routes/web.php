@@ -1,13 +1,16 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ServiceController;
+
+
 
 Route::get('/', function () {
 
     return view('home');
 });
 
-Route::get('/services', function () {
+/* Route::get('/services', function () {
     $services = [
         [
             'id' => 1,
@@ -101,7 +104,6 @@ Route::get('/services', function () {
     ];
 
     return view('services.index', compact('services'));
-});
-
-
+}); */
+Route::get('/services', [ServiceController::class, 'index']);
 require __DIR__ . '/auth.php';

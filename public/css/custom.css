@@ -16,6 +16,10 @@
 .service-details input[type="checkbox"] {
   display: none;
 }
+
+.list-group-item {
+  height: 155px;
+}
 .menu-checkbox:checked + label {
   background-color: #9c6114; /* verde chiaro, esempio */
   color: white; /* testo verde scuro */
@@ -29,4 +33,36 @@
 }
 .active-menu-item .menu-item-price {
   color: lightgray;
+}
+
+.increment-decrement-container {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+.increment-decrement-container input {
+  position: absolute;
+  bottom: 0;
+  width: 30px;
+  right: 50%;
+  text-align: center;
+  border: none;
+}
+
+.increment-decrement-container button {
+  position: absolute;
+}
+.increment-decrement-container button.decrement {
+  left: -16px;
+  width: 35px;
+  height: 100%;
+  border: none;
+  background: #ff000017;
+}
+.increment-decrement-container button.increment {
+  right: 16px;
+  width: 35px;
+  height: 100%;
+  border: none;
+  background: #0080003b;
 }

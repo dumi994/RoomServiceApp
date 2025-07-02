@@ -5,6 +5,13 @@
     <meta charset="utf-8">
     <title>Seaside Hotel</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <!-- jQuery Modal -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.min.js"></script>
+
+    <!-- Aggiungi anche Bootstrap JS e Popper.js (necessari per il modal) -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     @viteReactRefresh
     @vite(['resources/js/app.jsx'])
     <link rel="icon" href="images/icon.png" type="image/gif" sizes="16x16">
