@@ -80,4 +80,41 @@ class OrderController extends Controller
             $order
         );
     }
+    // OrderController.php
+    public function getStatus(Order $order)
+    {
+        // Ricarica l'ordine dal database per avere i dati più aggiornati
+        $order->refresh();
+
+        return response()->json([
+            'order_id' => $order->id,
+            'status' => $order->status, // Status REALE dal database
+            'status_text' => $this->getStatusText($order->status),
+            'updated_at' => $order->updated_at->format('Y-m-d H:i:s'),
+            'created_at' => $order->created_at->format('Y-m-d H:i:s')
+        ]);
+    }
+
+    private function getStatusText($status)
+    {
+        switch ($status) {
+            case 'sent':
+            case 'pending':
+            case 'received':
+                return 'Ordine ricevuto';
+
+            case 'processing':
+            case 'in_preparation':
+            case 'preparing':
+                return 'In preparazione';
+
+            case 'completed':
+            case 'delivered':
+            case 'ready':
+                return 'Consegnato';
+
+            default:
+                return 'Status: ' . $status;
+        }
+    }
 }
