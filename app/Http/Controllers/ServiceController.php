@@ -24,7 +24,22 @@ class ServiceController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        //dd($request->all());
+        $request->validate([
+            'first_name' => 'required',
+            'last_name' => 'required',
+            'room_number' => 'required',
+            'order_details' => 'required',
+
+        ]);
+
+        Service::create([
+            'first_name' => $request->first_name,
+            'last_name' => $request->last_name,
+            'room_number' => $request->room_number,
+            'order_details' => $request->order_details
+        ]);
+        return redirect()->route('services.index')->with('success', 'Task created successfully.');
     }
 
     /**

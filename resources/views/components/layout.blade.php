@@ -14,26 +14,28 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     @viteReactRefresh
     @vite(['resources/js/app.jsx'])
-    <link rel="icon" href="images/icon.png" type="image/gif" sizes="16x16">
+    <link rel="icon" href="{{ asset('images/icon.png') }}" type="image/gif" sizes="16x16">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="keywords" content="">
     <meta name="author" content="">
 
-    <!-- CSS Files
-        ================================================== -->
-    <link rel="stylesheet" href="css/bootstrap.min.css" type="text/css" id="bootstrap">
-    <link rel="stylesheet" href="css/plugins.css" type="text/css">
-    <link rel="stylesheet" href="css/style.css" type="text/css">
-    <link rel="stylesheet" href="css/color.css" type="text/css">
-    <link rel="stylesheet" href="css/custom.css" type="text/css">
+    <!-- CSS Files  CON asset() -->
+    <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}" type="text/css" id="bootstrap">
+    <link rel="stylesheet" href="{{ asset('css/plugins.css') }}" type="text/css">
+    <link rel="stylesheet" href="{{ asset('css/style.css') }}" type="text/css">
+    <link rel="stylesheet" href="{{ asset('css/color.css') }}" type="text/css">
+    <link rel="stylesheet" href="{{ asset('css/custom.css') }}" type="text/css">
 
-    <!-- supersized -->
-    <link rel='stylesheet' href='js/supersized/css/supersized.css' type='text/css'>
-    <link rel='stylesheet' href='js/supersized/theme/supersized.shutter.css' type='text/css'>
+    <!-- supersized  -->
+    <link rel='stylesheet' href='{{ asset('js/supersized/css/supersized.css') }}' type='text/css'>
+    <link rel='stylesheet' href='{{ asset('js/supersized/theme/supersized.shutter.css') }}' type='text/css'>
 
-    <!-- color scheme -->
-    <link rel="stylesheet" href="css/colors/brown.css" type="text/css" id="colors">
+    <!-- color scheme  -->
+    <link rel="stylesheet" href="{{ asset('css/colors/brown.css') }}" type="text/css" id="colors">
+
+    <!-- CSS per progress bar -->
+
 </head>
 
 <body class="has-menu-bar">
@@ -48,7 +50,7 @@
                         <!-- logo begin -->
                         <div id="logo">
                             <a href="index.html">
-                                <img class="logo" src="images/logo.png" alt="">
+                                <img class="logo" src="{{ asset('images/logo.png') }}" alt="">
                             </a>
                         </div>
                         <!-- logo close -->
@@ -79,7 +81,7 @@
                         <div class="pt80 pb80">
                             <div class="mo-nav text-center">
                                 <a href="index.html">
-                                    <img class="logo" src="images/logo.png" alt="">
+                                    <img class="logo" src="{{ asset('images/logo.png') }}" alt="">
                                 </a>
 
                                 <div class="spacer-single"></div>
@@ -136,35 +138,35 @@
         {{ $slot }}
     </div>
 
-    <!-- Javascript Files
-    ================================================== -->
-    <script src="js/plugins.js"></script>
-    <script src="js/designesia.js"></script>
+    <!-- Javascript Files  CON asset() -->
+    <script src="{{ asset('js/plugins.js') }}"></script>
+    <script src="{{ asset('js/designesia.js') }}"></script>
 
-    <!-- Supersized -->
-    <script src='js/supersized/js/supersized.3.2.7.js'></script>
-    <script src='js/supersized/theme/supersized.shutter.min.js'></script>
+    <!-- Supersized  -->
+    <script src='{{ asset('js/supersized/js/supersized.3.2.7.js') }}'></script>
+    <script src='{{ asset('js/supersized/theme/supersized.shutter.min.js') }}'></script>
 
     <script>
         jQuery(function($) {
 
             var slides = [];
             slides.push({
-                image: 'images/slider/1.jpg',
+                image: '{{ asset('images/slider/1.jpg') }}',
+                /
                 title: "<div class='slider-text'><h2 class='wow fadeInUp'>Relax</h2><a class='btn-line wow fadeInUp' data-wow-delay='.3s' href='/services'><span>Our Services</span></a></div>",
                 thumb: '',
                 url: ''
             });
 
             /*   slides.push({
-                  image: 'images/slider/2.jpg',
+                  image: '{{ asset('images/slider/2.jpg') }}', /
                   title: "<div class='slider-text'><h2 class='wow fadeInUp'>Comfort</h2><a class='btn-line wow fadeInUp' data-wow-delay='.3s' href='room-2-cols.html'><span>Choose Room</span></a></div>",
                   thumb: '',
                   url: ''
               });
 
               slides.push({
-                  image: 'images/slider/3.jpg',
+                  image: '{{ asset('images/slider/3.jpg') }}', /
                   title: "<div class='slider-text'><h2 class='wow fadeInUp'>Happy</h2><a class='btn-line wow fadeInUp' data-wow-delay='.3s' href='about.html'><span>Our Facilities</span></a></div>",
                   thumb: '',
                   url: ''

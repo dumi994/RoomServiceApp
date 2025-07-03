@@ -66,3 +66,119 @@
   border: none;
   background: #0080003b;
 }
+
+/* \\\\\\\\\\ */
+.order-tracking {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.tracking-progress {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  margin: 30px 0;
+}
+
+.tracking-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  z-index: 2;
+}
+
+.step-circle {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 10px;
+  transition: all 0.3s ease;
+}
+
+.step-label {
+  font-size: 14px;
+  font-weight: 500;
+  text-align: center;
+  max-width: 100px;
+}
+
+/* Stati degli step */
+.tracking-step.pending .step-circle {
+  background: #e9ecef;
+  color: #6c757d;
+  border: 2px solid #dee2e6;
+}
+
+.tracking-step.active .step-circle {
+  background: #ffc107;
+  color: white;
+  border: 2px solid #ffc107;
+  animation: pulse 2s infinite;
+}
+
+.tracking-step.completed .step-circle {
+  background: #28a745;
+  color: white;
+  border: 2px solid #28a745;
+}
+
+/* Linea di connessione */
+.tracking-line {
+  height: 3px;
+  background: #dee2e6;
+  flex: 1;
+  margin: 0 10px;
+  position: relative;
+  top: -20px;
+}
+
+.tracking-line.completed {
+  background: #28a745;
+}
+
+/* Animazione pulse per lo step attivo */
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  /*  .tracking-progress {
+    flex-direction: column;
+  }
+
+  .tracking-line {
+    width: 3px;
+    height: 40px;
+    margin: 10px 0;
+    top: 0;
+  } */
+
+  .step-label {
+    max-width: none;
+  }
+}
+.step {
+  opacity: 0.3;
+  transition: 0.3s;
+}
+.step.active {
+  opacity: 1;
+  font-weight: bold;
+}
