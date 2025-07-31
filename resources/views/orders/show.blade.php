@@ -85,8 +85,10 @@
                                 </div>
                             </div>
                             <div class="mt-4">
-                                <button class="btn btn-primary" id="new-order-btn">Fai un nuovo ordine</button>
-                                <button class="btn btn-secondary ms-2" id="back-to-services">Torna ai servizi</button>
+
+                                <a href="/services" class="btn btn-primary" id="new-order-btn"
+                                    id="back-to-services">Torna ai
+                                    servizi</a>
                             </div>
                         </div>
                     </div>
@@ -353,10 +355,10 @@
             $('.tracking-step').removeClass('active pending').addClass('completed');
             $('.tracking-line').addClass('completed');
 
-            updateStatusMessage('🎉 Il tuo ordine è stato completato e consegnato!', 'success');
+            updateStatusMessage('  Il tuo ordine è stato completato e consegnato!', 'success');
 
             setTimeout(function() {
-                alert('🎉 Il tuo ordine è stato completato e consegnato!');
+                alert('  Il tuo ordine è stato completato e consegnato!');
             }, 1000);
         }
 

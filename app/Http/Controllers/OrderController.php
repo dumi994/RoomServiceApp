@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\DB;
+
 use App\Models\Order;
 use Illuminate\Http\Request;
 
@@ -12,40 +14,34 @@ class OrderController extends Controller
      */
     public function index()
     {
-        //
+
+        return view('admin.index');
     }
 
     /**
      * Store a newly created resource in storage.
      */
+    // OrderController.php
     public function store(Request $request)
     {
-        try {
-            $request->validate([
-                'first_name' => 'required|string|max:255',
-                'last_name' => 'required|string|max:255',
-                'room_number' => 'required|string|max:50',
-                'order_details' => 'required|string',
-            ]);
+        $validated = $request->validate([
+            'first_name' => 'required|string|max:255',
+            'last_name' => 'required|string|max:255',
+            'room_number' => 'required|string|max:10',
+            'order_details' => 'required|string',
+        ]);
 
-            $order = Order::create([
-                'first_name' => $request->first_name,
-                'last_name' => $request->last_name,
-                'room_number' => $request->room_number,
-                'order_details' => $request->order_details,
-                'status' => $request->status
-            ]);
+        $order = Order::create([
+            'first_name' => $validated['first_name'],
+            'last_name' => $validated['last_name'],
+            'room_number' => $validated['room_number'],
+            'order_details' => $validated['order_details'],
+            'status' => 'sent', // Status iniziale
+        ]);
 
-            //return redirect()->route('services.index')->with('success', 'Ordine creato con successo!');
-            return response()->json([
-                'success' => true,
-                'message' => 'Ordine creato con successo!',
-                'order_id' => $order->id,
-                'status' => $order->status  // Restituisci lo status
-            ]);
-        } catch (\Exception $e) {
-            return back()->with('error', 'Errore durante la creazione dell\'ordine: ' . $e->getMessage());
-        }
+        // Redirect alla pagina show dell'ordine
+        return redirect()->route('orders.show', $order)
+            ->with('success', 'Ordine inviato con successo!');
     }
 
     /**
@@ -63,7 +59,27 @@ class OrderController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+
+        $request->validate([
+            'status' => 'required'
+        ]);
+        // Trova l'ordine per ID, oppure fallisci con errore 404
+        $order = \DB::table('orders')->where('id', $id)->first();
+        if (!$order) {
+            return response()->json(['error' => 'Ordine non trovato'], 404);
+        }
+
+        // Aggiorna lo status (con query builder serve update diretto)
+        \DB::table('orders')->where('id', $id)->update([
+            'status' => $request->status
+        ]);
+
+        // Risposta JSON di successo
+        return response()->json([
+            'message' => 'Status aggiornato con successo',
+            'order_id' => $id,
+            'new_status' => $request->status
+        ]);
     }
 
     /**

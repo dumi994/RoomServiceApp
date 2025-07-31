@@ -15,4 +15,11 @@ Route::get('/', function () {
 Route::resource('/services', ServiceController::class);
 Route::resource('/orders', OrderController::class);
 Route::get('/orders/{order}/status', [OrderController::class, 'getStatus'])->name('orders.status');
+Route::post('/orders/{id}/update-status', [OrderController::class, 'update']);
+
+/* ADMIN */
+
+
+Route::get('/dashboard', [OrderController::class, 'index']);
+
 require __DIR__ . '/auth.php';
