@@ -284,13 +284,13 @@
 
             switch (dbStatus) {
                 case 'sent':
-                case 'pending':
                 case 'received':
                     currentStep = 1;
                     statusText = 'Il tuo ordine è stato ricevuto dal nostro staff';
                     statusClass = 'info';
                     break;
 
+                case 'pending': // spostato qui
                 case 'processing':
                 case 'in_preparation':
                 case 'preparing':
@@ -355,10 +355,10 @@
             $('.tracking-step').removeClass('active pending').addClass('completed');
             $('.tracking-line').addClass('completed');
 
-            updateStatusMessage('  Il tuo ordine è stato completato e consegnato!', 'success');
+            updateStatusMessage('  Il tuo ordine è stato completato e verrà consegnato in pochi minuti!', 'success');
 
             setTimeout(function() {
-                alert('  Il tuo ordine è stato completato e consegnato!');
+                alert('  Il tuo ordine è stato completato e verrà consegnato in pochi minuti!');
             }, 1000);
         }
 

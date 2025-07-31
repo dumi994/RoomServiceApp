@@ -228,12 +228,14 @@
                     const container = document.getElementById('order-container');
                     let html = '';
                     const statusBadgeClass = {
-                        delivered: 'bg-success', // Verde
-                        sent: 'bg-danger', // Rosso
+                        delivered: 'bg-success', // verde
+                        pending: 'bg-warning', // giallo
+                        sent: 'bg-danger', // rosso
                     };
                     const orderStatus = {
-                        delivered: 'Ordine completato', // Verde
-                        sent: 'Ordine ricevuto', // Rosso
+                        delivered: 'Ordine completato',
+                        pending: 'In Preparazione',
+                        sent: 'Ordine Ricevuto',
                     };
                     data.forEach(order => {
                         const badgeClass = statusBadgeClass[order.status] || 'bg-secondary';
@@ -273,9 +275,25 @@
             const btn = $(this);
             const orderId = btn.data('id');
             const currentStatus = btn.data('status');
+            if (currentStatus === 'delivered') {
+                Swal.fire({
+                    title: 'Questo ordine è gia stato completato',
 
-            // Calcola il nuovo status per il toggle
-            const newStatus = currentStatus === 'sent' ? 'delivered' : 'sent';
+                    icon: 'warning',
+
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Ok',
+
+                })
+                return; // blocca click
+            }
+            let newStatus;
+            if (currentStatus === 'sent') newStatus = 'pending';
+            else if (currentStatus === 'pending') newStatus = 'delivered';
+            else if (currentStatus === 'delivered') newStatus = 'sent';
+            else newStatus = 'sent';
+
 
             Swal.fire({
                 title: 'Sei sicuro?',
@@ -319,10 +337,7 @@
                                 badge.addClass('bg-success').text('Ordine completato');
                             } else if (newStatus === 'sent') {
                                 badge.addClass('bg-danger').text('Ordine ricevuto');
-                            } else {
-                                badge.addClass('bg-secondary').text('Stato sconosciuto');
                             }
-
                             // Aggiorna il data-status con il nuovo stato
                             badge.data('status', newStatus);
                         },
