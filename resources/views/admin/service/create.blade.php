@@ -1,53 +1,43 @@
 <x-admin-layout>
-    <h2>Aggiungi voci servizi</h2>
+    <div class="container mt-5" style="max-width: 720px;">
+        <h2 class="mb-4 fw-semibold text-dark text-center">Aggiungi un nuovo Servizio</h2>
 
-    @if (session('success'))
-        <div style="color:green;">{{ session('success') }}</div>
-    @endif
+        @if (session('success'))
+            <div class="alert alert-success">{{ session('success') }}</div>
+        @endif
 
-    <div class="max-w-xl mx-auto mt-10 bg-white p-6 rounded-2xl shadow-md">
-        <h2 class="text-2xl font-bold mb-6 text-center text-gray-800">Aggiungi un nuovo Servizio</h2>
-
-        <form action="{{ route('services.store') }}" method="POST">
+        <form action="{{ route('services.store') }}" method="POST" class="p-4 border rounded shadow-sm bg-white">
             @csrf
 
-            <div class="mb-4">
-                <label for="name" class="block text-sm font-semibold text-gray-700 mb-1">Nome</label>
-                <input type="text" id="name" name="name" required
-                    class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    placeholder="Es. Room Service">
+            <div class="mb-3">
+                <label for="name" class="form-label">Nome</label>
+                <input type="text" id="name" name="name" class="form-control form-control-lg"
+                    placeholder="Es. Room Service" required>
             </div>
 
-            <div class="mb-4">
-                <label for="icon" class="block text-sm font-semibold text-gray-700 mb-1">Icona (classe Font Awesome
-                    o nome)</label>
-                <input type="text" id="icon" name="icon"
-                    class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            <div class="mb-3">
+                <label for="icon" class="form-label">Icona (classe Font Awesome)</label>
+                <input type="text" id="icon" name="icon" class="form-control form-control-lg"
                     placeholder="Es. fa-solid fa-bell">
             </div>
 
-            <div class="mb-4">
-                <label for="description" class="block text-sm font-semibold text-gray-700 mb-1">Descrizione</label>
-                <textarea id="description" name="description" rows="4"
-                    class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            <div class="mb-3">
+                <label for="description" class="form-label">Descrizione</label>
+                <textarea id="description" name="description" rows="4" class="form-control form-control-lg"
                     placeholder="Scrivi una descrizione del servizio..."></textarea>
             </div>
 
-            <div class="mb-4">
-                <label class="inline-flex items-center">
-                    <input type="checkbox" name="available" value="1" class="form-checkbox text-blue-600">
-                    <span class="ml-2 text-gray-700">Disponibile</span>
-                </label>
+            <div class="form-check mb-4">
+                <input class="form-check-input" type="checkbox" name="available" id="available" value="1">
+                <label class="form-check-label" for="available">Disponibile</label>
             </div>
 
-            <div class="flex justify-end">
-                <a href="{{ route('services.index') }}" class="mr-4 text-sm text-gray-500 hover:underline">Annulla</a>
-                <button type="submit"
-                    class="bg-blue-600 text-white px-5 py-2 rounded-lg hover:bg-blue-700 transition">Salva</button>
+            <div class="d-flex justify-content-between align-items-center">
+                <a href="{{ route('services.index') }}" class="text-secondary text-decoration-none">
+                    ← Torna ai servizi
+                </a>
+                <button type="submit" class="btn btn-dark px-4 py-2">Salva</button>
             </div>
         </form>
     </div>
-
-    <a href="{{ route('services.index') }}">Torna ai servizi</a>
-
 </x-admin-layout>
