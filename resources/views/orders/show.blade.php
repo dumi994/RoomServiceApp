@@ -19,7 +19,11 @@
 
         <section id="order-confirmation" class="no-bg no-top" style="min-height: 400px;">
             <div class="m-4">
-                <h2 class="title mb-4 text-center">Grazie per il tuo ordine!</h2>
+                <h2 class="title mb-4 text-center m-auto"
+                    style="    position: relative;
+    left: 50%;
+    transform: translate(-50%);">
+                    Grazie per il tuo ordine!</h2>
 
                 <div class="tracking-progress">
                     <div class="tracking-step" data-step="1" id="step-1">

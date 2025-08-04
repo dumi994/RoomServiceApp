@@ -133,7 +133,7 @@
                 <a href="#"><i class="fa fa-twitter fa-lg"></i></a>
                 <a href="#"><i class="fa fa-instagram fa-lg"></i></a>
             </div>
-            <span><a href="#">Book Now</a></span>
+
         </div>
         {{ $slot }}
     </div>
@@ -152,7 +152,7 @@
             var slides = [];
             slides.push({
                 image: '{{ asset('images/slider/1.jpg') }}',
-                /
+
                 title: "<div class='slider-text'><h2 class='wow fadeInUp'>Relax</h2><a class='btn-line wow fadeInUp' data-wow-delay='.3s' href='/services'><span>Our Services</span></a></div>",
                 thumb: '',
                 url: ''
