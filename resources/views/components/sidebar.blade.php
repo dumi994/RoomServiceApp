@@ -25,14 +25,30 @@
                   </a>
               </li>
 
-              <li class="nav-item">
-                  <a href="/dashboard/menu" class="nav-link">
+              <li class="nav-item has-treeview">
+                  <a href="#" class="nav-link">
                       <i class="nav-icon fas fa-edit"></i>
                       <p>
                           Menu
+                          <i class="right fas fa-angle-left"></i>
                       </p>
                   </a>
+                  <ul class="nav nav-treeview">
+                      <li class="nav-item">
+                          <a href="/services/" class="nav-link">
+                              <i class="far fa-circle nav-icon"></i>
+                              <p>Servizi</p>
+                          </a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="" class="nav-link">
+                              <i class="far fa-circle nav-icon"></i>
+                              <p>Menu items</p>
+                          </a>
+                      </li>
+                  </ul>
               </li>
+
 
               {{--  --}}
 

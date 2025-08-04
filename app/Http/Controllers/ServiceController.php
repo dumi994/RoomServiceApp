@@ -15,10 +15,15 @@ class ServiceController extends Controller
     {
         $services = Service::with('menu_items')->get();
         //return response()->json($services);
+        //$services = Service::all();
 
         return view('services.index', compact('services'));
     }
-
+    public function adminIndex()
+    {
+        $services = Service::all(); // prendi tutti i servizi
+        return view('admin.service.index', compact('services'));
+    }
     /**
      * Store a newly created resource in storage.
      */
@@ -51,6 +56,7 @@ class ServiceController extends Controller
     {
         //
     }
+
 
     /**
      * Update the specified resource in storage.
