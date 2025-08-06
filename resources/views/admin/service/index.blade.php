@@ -69,8 +69,41 @@
             </div>
             <!-- /.row -->
             <!-- Main row -->
-            <div class="row">
+            <div class="row d-block">
+                <table id="example" class="display w-100">
+                    <thead>
+                        <tr>
+                            <th>Nome</th>
+                            <th>Descrizione</th>
+                            <th>Icona</th>
+                            <th>Attivo</th>
+                            <th>Azioni</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($services as $s)
+                            <tr>
+                                <td>{{ $s->name }}</td>
+                                <td>{{ $s->description }}</td>
+                                <td>{{ $s->icon }}</td>
+                                <td>{{ $s->available }}</td>
+                                <td>{{ $s->available }}</td>
 
+                            </tr>
+                        @endforeach
+
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <th>Nome</th>
+                            <th>Descrizione</th>
+                            <th>Icona</th>
+                            <th>Attivo</th>
+                            <th>Azioni</th>
+
+                        </tr>
+                    </tfoot>
+                </table>
             </div>
             <!-- /.row (main row) -->
         </div><!-- /.container-fluid -->
@@ -78,142 +111,10 @@
 
     @section('scripts')
         <script>
-            function getOrders() {
-                fetch('/api/orders')
-                    .then(response => {
-                        if (!response.ok) throw new Error('Errore HTTP: ' + response.status);
-                        return response.json();
-                    })
-                    .then(data => {
-                        // Ordina decrescente per id
-                        data.sort((a, b) => b.id - a.id);
-                        console.log('Dati ricevuti:', data);
-
-                        const container = document.getElementById('order-container');
-                        let html = '';
-                        const statusBadgeClass = {
-                            delivered: 'bg-success', // verde
-                            pending: 'bg-warning', // giallo
-                            sent: 'bg-danger', // rosso
-                        };
-                        const orderStatus = {
-                            delivered: 'Ordine completato',
-                            pending: 'In Preparazione',
-                            sent: 'Ordine Ricevuto',
-                        };
-                        data.forEach(order => {
-                            const badgeClass = statusBadgeClass[order.status] || 'bg-secondary';
-                            html += `
-                            <div class="col-4" id="order-${order.id}">
-                                <div class="order-card">
-                                    <div class="order-header">
-                                        <h2>Ordine #${order.id}</h2>
-                                        <span class="update-status status ${badgeClass}" data-id="${order.id}" data-status="${order.status}">${orderStatus[order.status]}</span>
-                                    </div>
-                                    <div class="order-body">
-                                        <p><strong>Cliente:</strong> ${order.first_name} ${order.last_name}</p>
-                                        <p><strong>Camera:</strong> ${order.room_number}</p>
-    
-                                        <p><strong>Ordine:</strong> ${order.order_details}</p>
-                                    </div>
-                                </div>
-                            </div>
-                            `;
-                        });
-
-                        container.innerHTML = html;
-                    })
-                    .catch(error => {
-                        console.error('Errore nella richiesta:', error);
-                    });
-            }
-            getOrders()
-            setInterval(getOrders, 5000)
-
-
-            /*  */
-
-            $(document).on('click', '.update-status', function(e) {
-                e.preventDefault();
-
-                const btn = $(this);
-                const orderId = btn.data('id');
-                const currentStatus = btn.data('status');
-                if (currentStatus === 'delivered') {
-                    Swal.fire({
-                        title: 'Questo ordine è stato completato',
-                        icon: 'warning',
-                        confirmButtonColor: '#3085d6',
-                        cancelButtonColor: '#d33',
-                        confirmButtonText: 'Ok',
-
-                    })
-                    return; // blocca click
-                }
-                let newStatus;
-                if (currentStatus === 'sent') newStatus = 'pending';
-                else if (currentStatus === 'pending') newStatus = 'delivered';
-                else if (currentStatus === 'delivered') newStatus = 'sent';
-                else newStatus = 'sent';
-
-
-                Swal.fire({
-                    title: 'Sei sicuro?',
-                    text: "Vuoi davvero cambiare lo stato?",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'Sì, cambia stato!',
-                    cancelButtonText: 'Annulla'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-
-                        $.ajaxSetup({
-                            headers: {
-                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                            }
-                        });
-
-                        $.ajax({
-                            url: `/orders/${orderId}/update-status`,
-                            method: 'POST',
-                            data: {
-                                status: newStatus
-                            },
-                            dataType: "json",
-                            success: function(data) {
-                                Swal.fire(
-                                    'Fatto!',
-                                    'Lo stato è stato aggiornato.',
-                                    'success'
-                                );
-
-                                // Aggiorna il badge con nuovo status
-                                const badge = $(`#order-${orderId} .status`);
-
-                                // Rimuove tutte le classi di background
-                                badge.removeClass('bg-success bg-danger bg-secondary');
-
-                                if (newStatus === 'delivered') {
-                                    badge.addClass('bg-success').text('Ordine completato');
-                                } else if (newStatus === 'sent') {
-                                    badge.addClass('bg-danger').text('Ordine ricevuto');
-                                }
-                                // Aggiorna il data-status con il nuovo stato
-                                badge.data('status', newStatus);
-                            },
-                            error: function(xhr, status, error) {
-                                Swal.fire(
-                                    'Errore!',
-                                    'Errore durante l\'aggiornamento dello stato: ' + error,
-                                    'error'
-                                );
-                            }
-                        });
-
-                    }
-                });
+            new DataTable('#example', {
+                order: [
+                    [3, 'desc']
+                ]
             });
         </script>
     @endsection

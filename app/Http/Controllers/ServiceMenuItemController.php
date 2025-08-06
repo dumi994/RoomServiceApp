@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Service;
+use App\Models\ServiceMenuItem;
 
 class ServiceMenuItemController extends Controller
 {
@@ -12,7 +13,9 @@ class ServiceMenuItemController extends Controller
      */
     public function index()
     {
-        //
+        //$menuItems = ServiceMenuItem::all(); // prendi tutti i servizi
+        $menuItems = ServiceMenuItem::with('service')->get();
+        return view('admin.menu.index', compact('menuItems'));
     }
 
     /**

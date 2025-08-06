@@ -229,3 +229,14 @@
 .order-body p {
   margin: 0.5rem 0;
 }
+
+/* ICONE SERVIZI FRONT */
+.custom-icona {
+  padding: 30px;
+  width: 85px;
+  height: 85px;
+  background: #ca8e46;
+}
+.material-symbols-outlined {
+  font-size: 65px !important;
+}

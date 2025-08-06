@@ -3,7 +3,7 @@
     <!-- menu overlay close -->
     <div id="app"></div>
 
-    <div id="background" data-bgimage="url(images/background/2.jpg) fixed"></div>
+    <div id="background" data-bgimage="url(/images/background/2.jpg) fixed"></div>
     <div id="content-absolute">
 
         <!-- subheader -->
@@ -23,12 +23,12 @@
                 <div class="row align-items-center">
                     <div class="col-lg-3 col-6">
                         <div class="spacer-double sm-hide"></div>
-                        <img src="images/misc/1.jpg" alt="" class="img-responsive wow fadeInUp"
+                        <img src="/images/misc/1.jpg" alt="" class="img-responsive wow fadeInUp"
                             data-wow-duration="1s">
                     </div>
 
                     <div class="col-lg-3 col-6">
-                        <img src="images/misc/2.jpg" alt="" class="img-responsive wow fadeInUp"
+                        <img src="/images/misc/2.jpg" alt="" class="img-responsive wow fadeInUp"
                             data-wow-duration="1.5s">
                     </div>
 
@@ -67,7 +67,9 @@
                         <div class="col-md-4 mb-3 d-flex justify-content-center" id="service-id-{{ $service->id }}">
                             <div class="card-bg d-flex justify-content-center flex-column align-items-center"
                                 style="cursor:pointer;">
-                                <span class="icon"><img src="{{ $service->icon }}" alt=""></span>
+                                <span class="custom-icona d-flex align-items-center justify-content-center"
+                                    style="">{!! $service->icon !!}</span>
+
                                 <div class="text mt-4">
                                     <h3 class="text-center">{{ $service->name }}</h3>
                                 </div>
@@ -81,7 +83,7 @@
                     @foreach ($services as $service)
                         <div class="col-12 mt-2 service-details d-none" id="details-{{ $service->id }}">
                             <div class="d-flex justify-content-center py-5">
-                                <img src="images/logo-andana.webp" alt="Logo Andana" />
+                                <img src="/images/logo-andana.webp" alt="Logo Andana" />
                             </div>
                             <div class="p-3">
                                 <h3 class="text-center text-dark">{{ $service->name }}</h3>
@@ -200,32 +202,34 @@
 
             // Quando un checkbox viene selezionato/deselezionato
             $('.menu-checkbox').change(function() {
-                const itemId = $(this).data('item-id');
-                const qtyInput = $('.quantity-input[data-item-id="' + itemId + '"]');
+                const itemId = $(this).data('item-id'); // Prendi l'ID dell'elemento selezionato
+                const qtyInput = $('.quantity-input[data-item-id="' + itemId +
+                    '"]'); //  Seleziona il campo quantità corrispondente
 
                 if ($(this).is(':checked')) {
-                    qtyInput.prop('disabled', false);
-                    $(this).closest('li').addClass('active-menu-item');
-                    qtyInput.val('1');
+                    qtyInput.prop('disabled', false); // Abilita il campo quantità
+                    $(this).closest('li').addClass(
+                        'active-menu-item'); // Aggiunge la classe active per evidenziare la voce
+                    qtyInput.val('1'); // Imposta quantità iniziale a 1
 
-                    qtyInput.show()
-
+                    qtyInput.show() // Mostra il campo quantità
                 } else {
-                    qtyInput.prop('disabled', true);
-                    qtyInput.val('0');
-                    qtyInput.hide()
-                    $(this).closest('li').removeClass('active-menu-item');
+                    qtyInput.prop('disabled', true); // Disabilita il campo quantità
+                    qtyInput.val('0'); // Reimposta a 0
+                    qtyInput.hide(); // Nasconde il campo quantità
+                    $(this).closest('li').removeClass('active-menu-item'); // Rimuove classe active
                 }
             });
-
+            // Quando clicchi sul bottone "Conferma selezione"
             // Recupera i dati selezionati
             $('#conferma-btn').click(function() {
                 const selectedItems = [];
-
+                // Cicla su tutti i checkbox selezionati
                 $('.menu-checkbox:checked').each(function() {
                     const itemId = $(this).data('item-id');
-                    const qty = $('.quantity-input[data-item-id="' + itemId + '"]').val();
-                    const name = getMenuItemName(itemId);
+                    const qty = $('.quantity-input[data-item-id="' + itemId + '"]')
+                        .val(); // controlla la quantità selezionata
+                    const name = getMenuItemName(itemId); // Recupera il nome del menu
 
                     selectedItems.push({
                         id: itemId,
@@ -237,13 +241,15 @@
                 console.clear();
                 console.log("Selezionati:", selectedItems);
                 /*  */
-                $('#exampleModal').modal('toggle');
-
+                $('#exampleModal').modal('toggle'); // Mostra la modale del form ordine
+                // Costruisce una stringa riepilogativa dell’ordine
                 const testoOrdine = selectedItems
-                    .map(item => `${item.quantity} ${item.name}`)
+                    .map(item => `${item.quantity} ${item.name}`) // esempio: "2 Panino Club"
                     .join(', ');
 
-                $('#order_details').val(testoOrdine);
+                $('#order_details').val(
+                    testoOrdine); // Inserisci la stringa dentro il campo "Order Details" del form
+
 
             });
 
@@ -260,12 +266,12 @@
                 if (service.menu_items) {
                     for (const item of service.menu_items) {
                         if (item.id == itemId) {
-                            return item.name;
+                            return item.name; // Restituisce il nome dell’item
                         }
                     }
                 }
             }
-            return null;
+            return null; // Se non trova nulla, ritorna null
         }
     </script>
 </x-layout>

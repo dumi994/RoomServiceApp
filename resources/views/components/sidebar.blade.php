@@ -35,13 +35,13 @@
                   </a>
                   <ul class="nav nav-treeview">
                       <li class="nav-item">
-                          <a href="/services/" class="nav-link">
+                          <a href="/dashboard/services/" class="nav-link">
                               <i class="far fa-circle nav-icon"></i>
                               <p>Servizi</p>
                           </a>
                       </li>
                       <li class="nav-item">
-                          <a href="" class="nav-link">
+                          <a href="/dashboard/menu" class="nav-link">
                               <i class="far fa-circle nav-icon"></i>
                               <p>Menu items</p>
                           </a>

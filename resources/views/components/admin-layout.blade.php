@@ -30,6 +30,9 @@
     <!-- Google Font: Source Sans Pro -->
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('css/custom.css') }}" type="text/css">
+    {{-- DATATABLE --}}
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.3.2/css/dataTables.dataTables.css">
+
 </head>
 
 <body class="hold-transition sidebar-mini layout-fixed">
@@ -116,6 +119,8 @@
     <script src="{{ asset('assets/admin/dist/js/pages/dashboard.js') }}"></script>
     <script src="{{ asset('assets/admin/dist/js/demo.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    {{-- DATATABLE --}}
+    <script src="https://cdn.datatables.net/2.3.2/js/dataTables.js"></script>
 
     @yield('scripts')
 </body>

@@ -34,7 +34,8 @@
     <!-- color scheme  -->
     <link rel="stylesheet" href="{{ asset('css/colors/brown.css') }}" type="text/css" id="colors">
 
-    <!-- CSS per progress bar -->
+    <!-- CSS per icone google -->
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
 
 </head>
 
