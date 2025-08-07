@@ -87,7 +87,7 @@
                                 <td>{{ $s->description }}</td>
                                 <td>{{ $s->icon }}</td>
                                 <td>{{ $s->available }}</td>
-                                <td>{{ $s->available }}</td>
+                                <td>X Y Z</td>
 
                             </tr>
                         @endforeach

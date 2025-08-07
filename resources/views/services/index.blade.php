@@ -23,13 +23,13 @@
                 <div class="row align-items-center">
                     <div class="col-lg-3 col-6">
                         <div class="spacer-double sm-hide"></div>
-                        <img src="/images/misc/1.jpg" alt="" class="img-responsive wow fadeInUp"
-                            data-wow-duration="1s">
+                        <img src="/images/misc/1.jpg" alt="" id="service-image-1"
+                            class="img-responsive wow fadeInUp" data-wow-duration="1s">
                     </div>
 
                     <div class="col-lg-3 col-6">
-                        <img src="/images/misc/2.jpg" alt="" class="img-responsive wow fadeInUp"
-                            data-wow-duration="1.5s">
+                        <img src="/images/misc/2.jpg" alt=""
+                            id="service-image-2"class="img-responsive wow fadeInUp" data-wow-duration="1.5s">
                     </div>
 
                     <div class="col-lg-6 wow fadeIn">
@@ -273,5 +273,50 @@
             }
             return null; // Se non trova nulla, ritorna null
         }
+
+
+        /* CAMBIA IMMAGINE IN BASE AL SERVIZIO */
+        $(document).ready(function() {
+            //immagini di default
+            const defaultImgs = [
+                '/images/misc/1.jpg',
+                '/images/misc/2.jpg'
+            ]
+
+            function setImages(imgs) {
+                //prendi due immagini disponibili, se disponibili, altrimenti default
+                const img1 = imgs && imgs.length > 0 ? images[0] : defaultImgs[0];
+                const img2 = imgs && imgs.length > 0 ? images[1] : defaultImgs[1];
+
+            }
+            // All'avvio pagina carica immagini default
+            setImages(defaultImgs)
+
+            $('.card-bg').click(function() {
+                const card = $(this)
+                const parentCol = card.closest(".col-md-4")
+                const id = parentCol.attr("id").replace("service-id-", "")
+                const detailBox = $("#details-" + id);
+
+                //nascondi altri dettagli
+                $('.service-details').not(detailBox).slideUp().addClass('d-none')
+
+                //toggle box corrente
+
+                const isVisible = !detailBox.hasClass('d-none')
+                detailBox.slideToggle().toggleClass('d-none')
+
+                if (!isVisible) {
+                    //se aperto servizio, cambia immagini con quelle del servizio
+                    const service = service.find(s => s.id = id)
+                    if (service && service.images && service.images.length > 0) {
+                        setImages(service.images)
+                    } else {
+                        setImages(defaultImgs)
+                    }
+                }
+            })
+
+        })
     </script>
 </x-layout>

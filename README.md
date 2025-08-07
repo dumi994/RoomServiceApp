@@ -53,3 +53,16 @@ OrderItem → ServiceMenuItem: relazione Many-to-One (molti a uno)
 // 10. Documenta tutto!
 // - Commenti chiari
 // - README con istruzioni base per setup e sviluppo
+
+<!--  -->
+
+//storage
+//cambia immagini per ogni servizio selezionato
+//correggi link per dashboard
+// metti autenticazione
+//correggi bug apertura menu frontend
+
+//backend
+//metti visualizzazione ordine in base a stato
+//notifica nuovo ordine
+//eventuali statistiche prodotti piu venduti

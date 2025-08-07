@@ -20,6 +20,9 @@ Route::post('/orders/{id}/update-status', [OrderController::class, 'update']);
 /* DA RIVEDERE QUI */
 Route::get('/services/{service}/menu-items/create', [ServiceMenuItemController::class, 'create'])->name('services.menu-items.create');
 Route::post('/services/{service}/menu-items', [ServiceMenuItemController::class, 'store'])->name('services.menu-items.store');
+Route::post('/services/{service}/upload-images', [ServiceController::class, 'uploadImages'])->name('services.upload.images');
+Route::delete('/dashboard/services/{service}/delete-images', [ServiceController::class, 'deleteImage']);
+Route::get('/dashboard/services/{service}/images', [ServiceController::class, 'imagesList']);
 
 /* ADMIN */
 

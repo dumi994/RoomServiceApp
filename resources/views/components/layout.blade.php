@@ -152,7 +152,7 @@
 
             var slides = [];
             slides.push({
-                image: '{{ asset('images/slider/1.jpg') }}',
+                image: "{{ asset('images/slider/Gianni_Buonsante_DRO_0411.jpg') }}",
 
                 title: "<div class='slider-text'><h2 class='wow fadeInUp'>Relax</h2><a class='btn-line wow fadeInUp' data-wow-delay='.3s' href='/services'><span>Our Services</span></a></div>",
                 thumb: '',

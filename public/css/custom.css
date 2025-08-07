@@ -237,6 +237,33 @@
   height: 85px;
   background: #ca8e46;
 }
-.material-symbols-outlined {
+.material-symbols-outlined::not(.delete-icon) {
   font-size: 65px !important;
+}
+
+/* IMMAGINI EDIT SERVICE */
+.edit-service-img {
+  width: 100%;
+  padding: 20px;
+  height: 20vh;
+  background-size: cover;
+  width: 100%;
+  padding: 20px;
+  height: 20vh;
+  background-size: cover;
+  position: relative;
+}
+.edit-service-img .delete-icon {
+  width: 28px;
+  height: 28px;
+  background: red;
+  color: white;
+  border-radius: 3px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  position: absolute;
+  right: 5px;
+  top: 5px;
 }
