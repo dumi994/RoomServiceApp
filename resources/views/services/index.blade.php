@@ -21,15 +21,14 @@
         <section id="section-main" class="no-bg no-top" aria-label="section-menu">
             <div class="container">
                 <div class="row align-items-center">
-                    <div class="col-lg-3 col-6">
-                        <div class="spacer-double sm-hide"></div>
-                        <img src="/images/misc/1.jpg" alt="" id="service-image-1"
-                            class="img-responsive wow fadeInUp" data-wow-duration="1s">
+                    <div class="col-lg-3 col-6 mt-5">
+                        <img id="service-image-1" class="img-responsive wow fadeInUp" data-wow-duration="1s"
+                            style="object-fit: cover; width: 100%; height:40vh;" alt="Service image 1">
                     </div>
 
                     <div class="col-lg-3 col-6">
-                        <img src="/images/misc/2.jpg" alt=""
-                            id="service-image-2"class="img-responsive wow fadeInUp" data-wow-duration="1.5s">
+                        <img id="service-image-2" class="img-responsive wow fadeInUp" data-wow-duration="1.5s"
+                            style="object-fit: cover; width: 100%; height: 40vh" alt="Service image 2">
                     </div>
 
                     <div class="col-lg-6 wow fadeIn">
@@ -45,7 +44,6 @@
                                 rilassante e raffinata.
                             </p>
 
-                            {{-- <a href="room-2-cols.html" class="btn-line"><span>Choose Room</span>s</a> --}}
                         </div>
                     </div>
 
@@ -67,8 +65,9 @@
                         <div class="col-md-4 mb-3 d-flex justify-content-center" id="service-id-{{ $service->id }}">
                             <div class="card-bg d-flex justify-content-center flex-column align-items-center"
                                 style="cursor:pointer;">
-                                <span class="custom-icona d-flex align-items-center justify-content-center"
-                                    style="">{!! $service->icon !!}</span>
+                                <span class="custom-icona d-flex align-items-center justify-content-center">
+                                    {!! $service->icon !!}
+                                </span>
 
                                 <div class="text mt-4">
                                     <h3 class="text-center">{{ $service->name }}</h3>
@@ -106,69 +105,62 @@
                                                 </label>
 
                                                 <input type="number" min="1" value="0"
-                                                    class="form-control ms-2 quantity-input "
+                                                    class="form-control ms-2 quantity-input"
                                                     style="width: 80px; display:none"
                                                     data-item-id="{{ $item->id }}" disabled />
                                             </li>
                                         @endforeach
-                                        <div class="text-center mt-5">
-                                            <button class="btn btn-primary" id="conferma-btn" data-toggle="modal"
-                                                data-target="#exampleModal">Conferma selezione</button>
-
-                                        </div>
-                                        <!-- Modal -->
-
                                     </ul>
+                                    <div class="text-center mt-5">
+                                        <button class="btn btn-primary" id="conferma-btn" data-toggle="modal"
+                                            data-target="#exampleModal">Conferma selezione</button>
+                                    </div>
                                 @endif
                             </div>
                         </div>
                     @endforeach
-
                 </div>
             </div>
         </section>
+
         <!-- Modal -->
         <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
             aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-                        <input type="button" class="btn btn-secondary close-modal" data-dismiss="modal"
-                            aria-label="Close" value="X" />
-
-
+                        <h5 class="modal-title" id="exampleModalLabel">Conferma Ordine</h5>
+                        <button type="button" class="btn-close close-modal" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
                     </div>
 
                     <div class="modal-body">
-
                         <form id="order-form" action="{{ route('orders.store') }}" method="POST">
                             @csrf
                             <div class="mb-3">
-                                <label for="first_name" class="form-label">First Name</label>
+                                <label for="first_name" class="form-label">Nome</label>
                                 <input type="text" class="form-control" id="first_name" name="first_name" required>
                             </div>
 
                             <div class="mb-3">
-                                <label for="last_name" class="form-label">Last Name</label>
+                                <label for="last_name" class="form-label">Cognome</label>
                                 <input type="text" class="form-control" id="last_name" name="last_name" required>
                             </div>
 
                             <div class="mb-3">
-                                <label for="room_number" class="form-label">Room Number</label>
+                                <label for="room_number" class="form-label">Numero Camera</label>
                                 <input type="text" class="form-control" id="room_number" name="room_number"
                                     required>
                             </div>
 
                             <div class="mb-3">
-                                <label for="order_details" class="form-label">Order Details</label>
+                                <label for="order_details" class="form-label">Dettagli Ordine</label>
                                 <textarea class="form-control" id="order_details" name="order_details" rows="3" required></textarea>
                             </div>
+
                             <div class="modal-footer">
-                                <input type="button" class="btn btn-secondary close-modal" data-dismiss="modal"
-                                    value="Chiudi" />
-                                {{-- <input type="button" class="btn btn-primary text-white" id="send-order"
-                                    value="Invia ordine" /> --}}
+                                <button type="button" class="btn btn-secondary close-modal"
+                                    data-bs-dismiss="modal">Chiudi</button>
                                 <input type="submit" class="btn btn-primary text-white" id="send-order"
                                     value="Invia ordine" />
                             </div>
@@ -186,137 +178,119 @@
 
     <script>
         var services = @json($services);
+
         $(document).ready(function() {
-            $(".card-bg").click(function() {
+            const defaultImgs = [
+                '/images/misc/1.jpg',
+                '/images/misc/2.jpg'
+            ];
+
+            // Funzione per settare le immagini (usa tag img)
+            function setImages(imgs) {
+                const img1 = imgs && imgs.length > 0 ? imgs[0] : defaultImgs[0];
+                const img2 = imgs && imgs.length > 1 ? imgs[1] : defaultImgs[1];
+
+                $('#service-image-1').attr('src', img1);
+                $('#service-image-2').attr('src', img2);
+            }
+
+            // Imposta immagini di default all'avvio
+            setImages(defaultImgs);
+
+            // Click sul card-bg per mostrare dettagli e cambiare immagini
+            $('.card-bg').click(function() {
                 const card = $(this);
                 const parentCol = card.closest(".col-md-4");
                 const id = parentCol.attr("id").replace("service-id-", "");
                 const detailBox = $("#details-" + id);
 
-                // Nasconde tutti gli altri dettagli
-                $(".service-details").not(detailBox).slideUp().addClass("d-none");
+                if (detailBox.hasClass('d-none')) {
+                    // Nascondi gli altri dettagli
+                    $('.service-details').not(detailBox).slideUp(300, function() {
+                        $(this).addClass('d-none');
+                    });
 
-                // Toggle del box corrente
-                detailBox.slideToggle().toggleClass("d-none");
-            });
+                    // Mostra questo dettaglio
+                    detailBox.removeClass('d-none').hide().slideDown(300);
 
-            // Quando un checkbox viene selezionato/deselezionato
-            $('.menu-checkbox').change(function() {
-                const itemId = $(this).data('item-id'); // Prendi l'ID dell'elemento selezionato
-                const qtyInput = $('.quantity-input[data-item-id="' + itemId +
-                    '"]'); //  Seleziona il campo quantità corrispondente
-
-                if ($(this).is(':checked')) {
-                    qtyInput.prop('disabled', false); // Abilita il campo quantità
-                    $(this).closest('li').addClass(
-                        'active-menu-item'); // Aggiunge la classe active per evidenziare la voce
-                    qtyInput.val('1'); // Imposta quantità iniziale a 1
-
-                    qtyInput.show() // Mostra il campo quantità
+                    const service = services.find(s => s.id == id);
+                    if (service && service.images && service.images.length > 0) {
+                        $('#service-image-1, #service-image-2').fadeOut(300, function() {
+                            setImages(service.images);
+                            $('#service-image-1, #service-image-2').fadeIn(600);
+                        });
+                    } else {
+                        $('#service-image-1, #service-image-2').fadeOut(300, function() {
+                            setImages(defaultImgs);
+                            $('#service-image-1, #service-image-2').fadeIn(600);
+                        });
+                    }
                 } else {
-                    qtyInput.prop('disabled', true); // Disabilita il campo quantità
-                    qtyInput.val('0'); // Reimposta a 0
-                    qtyInput.hide(); // Nasconde il campo quantità
-                    $(this).closest('li').removeClass('active-menu-item'); // Rimuove classe active
+                    // Nascondi dettaglio corrente
+                    detailBox.slideUp(300, function() {
+                        detailBox.addClass('d-none');
+                    });
                 }
             });
-            // Quando clicchi sul bottone "Conferma selezione"
-            // Recupera i dati selezionati
-            $('#conferma-btn').click(function() {
-                const selectedItems = [];
-                // Cicla su tutti i checkbox selezionati
-                $('.menu-checkbox:checked').each(function() {
-                    const itemId = $(this).data('item-id');
-                    const qty = $('.quantity-input[data-item-id="' + itemId + '"]')
-                        .val(); // controlla la quantità selezionata
-                    const name = getMenuItemName(itemId); // Recupera il nome del menu
 
-                    selectedItems.push({
-                        id: itemId,
-                        name: name,
-                        quantity: qty
-                    });
+
+            // Gestione checkboxes per abilitare/disabilitare input quantità
+            $(document).on('change', '.menu-checkbox', function() {
+                const checkbox = $(this);
+                const itemId = checkbox.data('item-id');
+                const qtyInput = $('.quantity-input[data-item-id="' + itemId + '"]');
+
+                if (checkbox.is(':checked')) {
+                    qtyInput.prop('disabled', false).val(1).show();
+                } else {
+                    qtyInput.prop('disabled', true).val(0).hide();
+                }
+            });
+
+            // Gestione submit form: raccogli i dati selezionati
+            $('#order-form').submit(function(e) {
+                const selectedItems = [];
+
+                $('.menu-checkbox:checked').each(function() {
+                    const checkbox = $(this);
+                    const itemId = checkbox.data('item-id');
+                    const qtyInput = $('.quantity-input[data-item-id="' + itemId + '"]');
+                    const quantity = parseInt(qtyInput.val());
+
+                    if (quantity > 0) {
+                        selectedItems.push({
+                            id: itemId,
+                            quantity: quantity
+                        });
+                    }
                 });
 
-                console.clear();
-                console.log("Selezionati:", selectedItems);
-                /*  */
-                $('#exampleModal').modal('toggle'); // Mostra la modale del form ordine
-                // Costruisce una stringa riepilogativa dell’ordine
-                const testoOrdine = selectedItems
-                    .map(item => `${item.quantity} ${item.name}`) // esempio: "2 Panino Club"
-                    .join(', ');
+                if (selectedItems.length === 0) {
+                    e.preventDefault();
+                    alert("Seleziona almeno un elemento e imposta una quantità valida.");
+                    return false;
+                }
 
-                $('#order_details').val(
-                    testoOrdine); // Inserisci la stringa dentro il campo "Order Details" del form
+                // Aggiungere dati al form nascosti
+                $('#order-form').find('input[name="items"]').remove();
+                selectedItems.forEach(function(item, index) {
+                    $('#order-form').append(
+                        $('<input>')
+                        .attr('type', 'hidden')
+                        .attr('name', `items[${index}][id]`)
+                        .val(item.id)
+                    );
+                    $('#order-form').append(
+                        $('<input>')
+                        .attr('type', 'hidden')
+                        .attr('name', `items[${index}][quantity]`)
+                        .val(item.quantity)
+                    );
+                });
 
-
+                return true;
             });
-
-
         });
-        //CHIUDI modale
-        $('.close-modal').click(function() {
-            $('#exampleModal').modal('hide');
-
-        })
-
-        function getMenuItemName(itemId) {
-            for (const service of services) {
-                if (service.menu_items) {
-                    for (const item of service.menu_items) {
-                        if (item.id == itemId) {
-                            return item.name; // Restituisce il nome dell’item
-                        }
-                    }
-                }
-            }
-            return null; // Se non trova nulla, ritorna null
-        }
-
-
-        /* CAMBIA IMMAGINE IN BASE AL SERVIZIO */
-        $(document).ready(function() {
-            //immagini di default
-            const defaultImgs = [
-                '/images/misc/1.jpg',
-                '/images/misc/2.jpg'
-            ]
-
-            function setImages(imgs) {
-                //prendi due immagini disponibili, se disponibili, altrimenti default
-                const img1 = imgs && imgs.length > 0 ? images[0] : defaultImgs[0];
-                const img2 = imgs && imgs.length > 0 ? images[1] : defaultImgs[1];
-
-            }
-            // All'avvio pagina carica immagini default
-            setImages(defaultImgs)
-
-            $('.card-bg').click(function() {
-                const card = $(this)
-                const parentCol = card.closest(".col-md-4")
-                const id = parentCol.attr("id").replace("service-id-", "")
-                const detailBox = $("#details-" + id);
-
-                //nascondi altri dettagli
-                $('.service-details').not(detailBox).slideUp().addClass('d-none')
-
-                //toggle box corrente
-
-                const isVisible = !detailBox.hasClass('d-none')
-                detailBox.slideToggle().toggleClass('d-none')
-
-                if (!isVisible) {
-                    //se aperto servizio, cambia immagini con quelle del servizio
-                    const service = service.find(s => s.id = id)
-                    if (service && service.images && service.images.length > 0) {
-                        setImages(service.images)
-                    } else {
-                        setImages(defaultImgs)
-                    }
-                }
-            })
-
-        })
     </script>
+
 </x-layout>
