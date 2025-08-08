@@ -33,12 +33,14 @@ Route::get('/dashboard', [OrderController::class, 'index']);
 
     return view('admin/menu/index');
 }); */
-Route::get('/dashboard/menu', [ServiceMenuItemController::class, 'index']);
-
+/* Route::get('/dashboard/menu', [ServiceMenuItemController::class, 'index']); */
+Route::resource('/dashboard/menu', ServiceMenuItemController::class);
 /* Route::get('/dashboard/services', function () {
 
     return view('admin/service/index');
 }); */
-Route::get('/dashboard/services', [ServiceController::class, 'adminIndex']);
+Route::get('/dashboard/services', [ServiceController::class, 'adminIndex'])->name('dashboard.services');
+
+
 
 require __DIR__ . '/auth.php';

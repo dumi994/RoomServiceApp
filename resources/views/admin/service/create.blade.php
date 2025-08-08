@@ -6,7 +6,8 @@
             <div class="alert alert-success">{{ session('success') }}</div>
         @endif
 
-        <form action="{{ route('services.store') }}" method="POST" class="p-4 border rounded shadow-sm bg-white">
+        <form action="{{ route('services.store') }}" method="POST" enctype="multipart/form-data" id="service-form"
+            class="p-4 border rounded shadow-sm bg-white">
             @csrf
 
             <div class="mb-3">
@@ -32,10 +33,14 @@
                 <label class="form-check-label" for="available">Disponibile</label>
             </div>
 
+            <div class="mb-4">
+                <label for="images" class="form-label">Carica immagini (max 2)</label>
+                <input type="file" name="images[]" id="images" class="form-control" multiple accept="image/*" />
+            </div>
+
             <div class="d-flex justify-content-between align-items-center">
-                <a href="{{ route('services.index') }}" class="text-secondary text-decoration-none">
-                    ← Torna ai servizi
-                </a>
+                <a href="{{ route('services.index') }}" class="text-secondary text-decoration-none">← Torna ai
+                    servizi</a>
                 <button type="submit" class="btn btn-dark px-4 py-2">Salva</button>
             </div>
         </form>

@@ -37,15 +37,38 @@ class ServiceController extends Controller
 
     public function store(Request $request)
     {
-        die($request->all());
         $data = $request->validate([
             'name' => 'required|string|max:255',
             'icon' => 'nullable|string|max:255',
             'description' => 'nullable|string',
-            'available' => 'required|boolean',
+            'available' => 'nullable|boolean',
+            'images.*' => 'nullable|image|max:5120', // max 5MB
         ]);
 
+        // Se checkbox non selezionata
+        $data['available'] = $request->has('available') ? true : false;
+
         $service = Service::create($data);
+
+        $disk = 'public';
+        $finalImages = [];
+
+        if ($request->hasFile('images')) {
+            $images = $request->file('images');
+
+            // Limitiamo a 2 immagini max
+            $images = array_slice($images, 0, 2);
+
+            foreach ($images as $image) {
+                $filename = uniqid() . '.' . $image->getClientOriginalExtension();
+                $path = $image->storeAs("services/{$service->id}", $filename, $disk);
+                $finalImages[] = $path;
+            }
+        }
+
+        // Salviamo i path delle immagini nell'array 'images' (assumendo che la colonna 'images' sia JSON)
+        $service->images = $finalImages;
+        $service->save();
 
         return redirect()->route('services.menu-items.create', $service->id)
             ->with('success', 'Service creato! Ora aggiungi le voci menu.');
@@ -153,6 +176,26 @@ class ServiceController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $service = Service::findOrFail($id);
+
+        // cancella le immagini dal filesystem
+        $disk = 'public';
+        $folder = "services/{$service->id}";
+
+        if ($service->images && is_array($service->images)) {
+            foreach ($service->images as $imagePath) {
+                if (Storage::disk($disk)->exists($imagePath)) {
+                    Storage::disk($disk)->delete($imagePath);
+                }
+            }
+        }
+        // Cancella la cartella del servizio e tutto il suo contenuto
+        if (Storage::disk($disk)->exists($folder)) {
+            Storage::disk($disk)->deleteDirectory($folder);
+        }
+        // elimina il record
+        $service->delete();
+
+        return redirect()->route('dashboard.services')->with('success', 'Servizio eliminato con successo');
     }
 }

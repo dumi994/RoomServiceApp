@@ -12,24 +12,21 @@
                 @csrf
             </form>
             <div class="row mt-2">
+                @if (!empty($service->images) && is_iterable($service->images))
+                    @foreach ($service->images as $index => $image)
+                        <div class=" col-6">
+                            <div class="edit-service-img shadow rounded"
+                                style="background-image: url('{{ isset($image) ? asset($image) : asset('images/default1.jpg') }}')">
 
-                @foreach ($service->images as $index => $image)
-                    <div class=" col-6">
-                        <div class="edit-service-img shadow rounded"
-                            style="background-image: url('{{ isset($image) ? asset($image) : asset('images/default1.jpg') }}')">
-
-                            <span data-index="{{ $index }}" data-image="{{ $image }}"
-                                class="material-symbols-outlined delete-icon">
-                                delete
-                            </span>
+                                <span data-index="{{ $index }}" data-image="{{ $image }}"
+                                    class="material-symbols-outlined delete-icon">
+                                    delete
+                                </span>
+                            </div>
                         </div>
-                    </div>
-                @endforeach
-
+                    @endforeach
+                @endif
             </div>
-            <h1>uploaded</h1>
-
-
             <div id="uploaded-images" class="row"></div>
 
         </div>

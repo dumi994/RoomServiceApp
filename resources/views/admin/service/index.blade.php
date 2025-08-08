@@ -87,7 +87,30 @@
                                 <td>{{ $s->description }}</td>
                                 <td>{{ $s->icon }}</td>
                                 <td>{{ $s->available }}</td>
-                                <td>X Y Z</td>
+                                <td>
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <a href="/services/{{ $s->id }}/edit">
+                                                <span style="color:rgb(60, 60, 222)" class="material-symbols-outlined">
+                                                    edit_square
+                                                </span>
+                                            </a>
+                                        </div>
+                                        <div class="col-6">
+                                            <form action="{{ route('services.destroy', $s->id) }}" method="POST"
+                                                class="delete-form">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn-no-style">
+                                                    <span style="color:red"
+                                                        class="material-symbols-outlined delete-icon">
+                                                        delete
+                                                    </span>
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </td>
 
                             </tr>
                         @endforeach
@@ -116,6 +139,32 @@
                     [3, 'desc']
                 ]
             });
+
+
+            $(document).ready(function() {
+                $('.delete-form').on('submit', function(e) {
+                    e.preventDefault(); // blocca il submit
+
+                    const form = this;
+
+                    Swal.fire({
+                        title: 'Sei sicuro?',
+                        text: "Non potrai tornare indietro!",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#d33',
+                        cancelButtonColor: '#3085d6',
+                        confirmButtonText: 'Sì, elimina!',
+                        cancelButtonText: 'Annulla'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            form.submit(); // invia il form se confermato
+                        }
+                    });
+                });
+            });
+        </script>
+
         </script>
     @endsection
 </x-admin-layout>

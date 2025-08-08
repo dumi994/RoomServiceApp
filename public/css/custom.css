@@ -1,3 +1,9 @@
+.btn-no-style {
+  all: unset;
+  cursor: pointer;
+  display: inline-block;
+}
+
 .card-bg img {
   width: 100px;
   padding: 15px;
@@ -237,6 +243,10 @@
   height: 85px;
   background: #ca8e46;
 }
+.custom-icona .material-symbols-outlined {
+  font-size: 70px;
+}
+
 .material-symbols-outlined::not(.delete-icon) {
   font-size: 65px !important;
 }

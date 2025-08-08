@@ -37,8 +37,25 @@
                       <li class="nav-item">
                           <a href="/dashboard/services/" class="nav-link">
                               <i class="far fa-circle nav-icon"></i>
-                              <p>Servizi</p>
+                              <p>
+                                  Servizi
+                                  <i class="right fas fa-angle-left"></i> <!-- freccia per indicare submenu -->
+                              </p>
                           </a>
+                          <ul class="nav nav-treeview">
+                              <li class="nav-item">
+                                  <a href="/dashboard/services/" class="nav-link">
+                                      <i class="far fa-dot-circle nav-icon"></i>
+                                      <p>Elenco Servizi</p>
+                                  </a>
+                              </li>
+                              <li class="nav-item">
+                                  <a href="/dashboard/services/create" class="nav-link">
+                                      <i class="far fa-dot-circle nav-icon"></i>
+                                      <p>Nuovo Servizio</p>
+                                  </a>
+                              </li>
+                          </ul>
                       </li>
                       <li class="nav-item">
                           <a href="/dashboard/menu" class="nav-link">

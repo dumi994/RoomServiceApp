@@ -53,17 +53,27 @@ class ServiceMenuItemController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(ServiceMenuItem $menu)
     {
-        //
+        $services = Service::all();
+        return view('admin.menu.edit', compact('menu', 'services'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, ServiceMenuItem $menu)
     {
-        //
+        $data = $request->validate([
+            'name' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'price' => 'required|numeric',
+            'service_id' => 'required|exists:services,id',
+        ]);
+
+        $menu->update($data);
+
+        return redirect()->route('menu.index')->with('success', 'Voce menu aggiornata!');
     }
 
     /**

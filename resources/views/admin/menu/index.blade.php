@@ -85,9 +85,32 @@
                             <tr>
                                 <td>{{ $i->name }}</td>
                                 <td>{{ $i->description }}</td>
-                                <td>{{ $i->price }}</td>
-                                <td>{{ $i->service_id->name ?? 'N/A' }}</td>
-                                <td>{{ $i->available }}</td>
+                                <td>{{ $i->price }} €</td>
+                                <td>{{ $i->service->name }}</td>
+                                <td>
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <a href="menu/{{ $i->id }}/edit">
+                                                <span style="color:rgb(60, 60, 222)" class="material-symbols-outlined">
+                                                    edit_square
+                                                </span>
+                                            </a>
+                                        </div>
+                                        <div class="col-6">
+                                            <form action="{{ route('menu.destroy', $i->id) }}" method="POST"
+                                                class="delete-form">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn-no-style">
+                                                    <span style="color:red"
+                                                        class="material-symbols-outlined delete-icon">
+                                                        delete
+                                                    </span>
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </td>
 
                             </tr>
                         @endforeach
@@ -97,7 +120,7 @@
                         <tr>
                             <th>Nome</th>
                             <th>Descrizione</th>
-                            <th>Icona</th>
+                            <th>Prezzo</th>
                             <th>Attivo</th>
                             <th>Azioni</th>
 
