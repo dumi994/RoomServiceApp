@@ -39,7 +39,7 @@
             </div>
 
             <div class="d-flex justify-content-between align-items-center">
-                <a href="{{ route('services.index') }}" class="text-secondary text-decoration-none">← Torna ai
+                <a href="{{ route('dashboard.services.index') }}" class="text-secondary text-decoration-none">← Torna ai
                     servizi</a>
                 <button type="submit" class="btn btn-dark px-4 py-2">Salva</button>
             </div>

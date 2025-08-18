@@ -346,5 +346,7 @@
                 $('#order-form button[type="submit"]').prop('disabled', false).text('Invia ordine');
             });
         });
+
+        /* checkbox disponibilità */
     </script>
 </x-layout>

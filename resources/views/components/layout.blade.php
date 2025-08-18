@@ -37,6 +37,7 @@
     <!-- CSS per icone google -->
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
 
+
 </head>
 
 <body class="has-menu-bar">
@@ -44,9 +45,13 @@
     <div id="content" class="no-bottom no-top">
         <div class="float-text">
             <div class="de_social-icons">
-                <a href="#"><i class="fa fa-facebook fa-lg"></i></a>
-                <a href="#"><i class="fa fa-twitter fa-lg"></i></a>
-                <a href="#"><i class="fa fa-instagram fa-lg"></i></a>
+                {{--   <a href="https://it.lhw.com/hotel/LAndana-Resort-Castiglione-della-Pescaia-Italy">
+                    <img style="width:16px; margin-bottom:5px" src="{{ asset('images/lhw-logo.png') }}" alt="">
+                </a> --}}
+                <a href="https://www.facebook.com/tenutalabadiola/?locale=it_IT"><i
+                        class="fa fa-facebook fa-lg"></i></a>
+
+                <a href="https://www.instagram.com/andana_resort/"><i class="fa fa-instagram fa-lg"></i></a>
             </div>
 
         </div>
@@ -60,7 +65,13 @@
     <!-- Supersized  -->
     <script src='{{ asset('js/supersized/js/supersized.3.2.7.js') }}'></script>
     <script src='{{ asset('js/supersized/theme/supersized.shutter.min.js') }}'></script>
-
+    <style>
+        #prevslide,
+        #nextslide,
+        #pauseplay {
+            display: none !important;
+        }
+    </style>
     <script>
         jQuery(function($) {
             // Lista tutti gli elementi visibili (display non none e opacity > 0)
@@ -73,7 +84,7 @@
             slides.push({
                 image: "{{ asset('images/slider/Gianni_Buonsante_DRO_0411.jpg') }}",
 
-                title: "<div class='slider-text'><h2 class='wow fadeInUp'>Relax</h2><a class='btn-line wow fadeInUp' data-wow-delay='.3s' href='/services'><span>Our Services</span></a></div>",
+                title: "<div class='slider-text'><h2 class='wow fadeInUp'>Relax</h2><a class='btn-line wow fadeInUp' data-wow-delay='.3s' href='/services'><span>Benessere & Servizi</span></a></div>",
                 thumb: '',
                 url: ''
             });
@@ -99,9 +110,9 @@
 
                 transition: 1, // 0-None, 1-Fade, 2-Slide Top, 3-Slide Right, 4-Slide Bottom, 5-Slide Left, 6-Carousel Right, 7-Carousel Left
                 transition_speed: 500, // Speed of transition
-                slide_links: 'blank', // Individual links for each slide (Options: false, 'num', 'name', 'blank')
+                slide_links: false, // Individual links for each slide (Options: false, 'num', 'name', 'blank')
                 slides: slides,
-                autoplay: 1,
+                autoplay: 0,
                 fit_always: 0,
                 performance: 0,
                 image_protect: 1 // Disables image dragging and right click with Javascript

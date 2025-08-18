@@ -15,7 +15,12 @@
             @php
                 $currentRoute = request()->route()->getName(); // o request()->path()
             @endphp
-
+            <li class="nav-item">
+                <a href="{{ url('/dashboard') }}" class="nav-link {{ request()->is('dashboard') ? 'active' : '' }}">
+                    <i class="nav-icon fas fa-shopping-cart"></i>
+                    <p>Ordini</p>
+                </a>
+            </li>
             <li class="nav-item has-treeview {{ request()->is('dashboard/services*') ? 'menu-open' : '' }}">
                 <a href="#" class="nav-link {{ request()->is('dashboard/services*') ? 'active' : '' }}">
                     <i class="nav-icon fas fa-edit"></i>

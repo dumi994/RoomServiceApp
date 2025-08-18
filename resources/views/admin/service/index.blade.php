@@ -76,7 +76,7 @@
                             <th>Nome</th>
                             <th>Descrizione</th>
                             <th>Icona</th>
-                            <th>Attivo</th>
+                            <th>Stato</th>
                             <th>Azioni</th>
                         </tr>
                     </thead>
@@ -86,7 +86,15 @@
                                 <td>{{ $s->name }}</td>
                                 <td>{{ $s->description }}</td>
                                 <td>{{ $s->icon }}</td>
-                                <td>{{ $s->available }}</td>
+                                <td>
+                                    <div class="">
+                                        <label class="switch">
+                                            <input type="checkbox" class="toggle-available"
+                                                data-id="{{ $s->id }}" {{ $s->available ? 'checked' : '' }}>
+                                            <span class="slider round"></span>
+                                        </label>
+                                    </div>
+                                </td>
                                 <td>
                                     <div class="row">
                                         <div class="col-6">
@@ -121,7 +129,7 @@
                             <th>Nome</th>
                             <th>Descrizione</th>
                             <th>Icona</th>
-                            <th>Attivo</th>
+                            <th>Stato</th>
                             <th>Azioni</th>
 
                         </tr>
@@ -163,8 +171,25 @@
                     });
                 });
             });
-        </script>
+            /* SWITCH BUTTON */
+            $(document).on("change", ".toggle-available", function() {
+                let serviceId = $(this).data("id");
+                let checked = $(this).is(":checked");
 
+                $.ajax({
+                    url: "/api/services/" + serviceId,
+                    type: "PUT",
+                    data: {
+                        available: checked ? 1 : 0
+                    },
+                    success: function(response) {
+                        console.log("Servizio aggiornato:", response.service.available);
+                    },
+                    error: function(xhr) {
+                        console.error("Errore aggiornamento servizio");
+                    }
+                });
+            });
         </script>
     @endsection
 </x-admin-layout>

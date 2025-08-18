@@ -4,9 +4,9 @@
     <div class='slider-overlay'></div>
 
     <div id="slidecaption"></div>
-
+    {{-- 
     <div class="container">
-        <div id="prevthumb"></div>
+     {{--    <div id="prevthumb"></div>
         <div id="nextthumb"></div>
 
         <!--Arrow Navigation-->
@@ -32,9 +32,9 @@
                 <ul id="slide-list"></ul>
 
             </div>
-        </div>
+        </div> --}}
     </div>
-
+    --}}
 
 
 </x-layout>
