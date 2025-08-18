@@ -85,8 +85,24 @@ class ServiceController extends Controller
     }
     public function update(Request $request, string $id)
     {
-        //
+        $data = $request->validate([
+            'name' => 'required|string|max:255',
+            'icon' => 'nullable|string|max:255',
+            'description' => 'nullable|string',
+            'available' => 'nullable|boolean',
+        ]);
+
+        // checkbox disponibile
+        $data['available'] = $request->has('available') ? true : false;
+
+        $service = Service::findOrFail($id);
+        $service->update($data);
+
+        return redirect()
+            ->route('dashboard.services.edit', $service->id)
+            ->with('success', 'Servizio aggiornato con successo!');
     }
+
     public function uploadImages(Request $request, $id)
     {
 

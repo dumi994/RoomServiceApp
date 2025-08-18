@@ -7,8 +7,8 @@
         @endif
         <div class="my-4">
             <h5 class="mt-5">Carica immagini</h5>
-            <form action="{{ route('services.upload.images', $service->id) }}" method="POST" enctype="multipart/form-data"
-                class="dropzone" id="dropzone-form">
+            <form action="{{ route('dashboard.services.upload.images', $service->id) }}" method="POST"
+                enctype="multipart/form-data" class="dropzone" id="dropzone-form">
                 @csrf
             </form>
             <div class="row mt-2">
@@ -30,7 +30,7 @@
             <div id="uploaded-images" class="row"></div>
 
         </div>
-        <form action="{{ route('services.update', $service->id) }}" method="POST"
+        <form action="{{ route('dashboard.services.update', $service->id) }}" method="POST"
             class="p-4 border rounded shadow-sm bg-white">
             @csrf
             @method('PUT') {{-- aggiungi questo se è una route di update --}}
@@ -63,7 +63,7 @@
             </div>
 
             <div class="d-flex justify-content-between align-items-center">
-                <a href="{{ route('services.index') }}" class="text-secondary text-decoration-none">
+                <a href="{{ route('dashboard.services.index') }}" class="text-secondary text-decoration-none">
                     ← Torna ai servizi
                 </a>
                 <button type="submit" class="btn btn-dark px-4 py-2">Salva</button>

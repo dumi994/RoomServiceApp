@@ -14,7 +14,10 @@ class ServiceController extends Controller
      */
     public function index()
     {
-        $services = Service::with('menu_items')->get();
+        $services = Service::with('menu_items')
+            ->where('available', 1)
+            ->get();
+
         //return response()->json($services);
         //$services = Service::all();
 

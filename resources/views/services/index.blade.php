@@ -60,7 +60,7 @@
                     </div>
                 </div>
 
-                <div class="row">
+                <div class="row justify-content-center">
                     @foreach ($services as $service)
                         <div class="col-md-4 mb-3 d-flex justify-content-center" id="service-id-{{ $service->id }}">
                             <div class="card-bg d-flex justify-content-center flex-column align-items-center"
