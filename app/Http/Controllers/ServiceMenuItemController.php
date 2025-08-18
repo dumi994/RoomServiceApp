@@ -21,26 +21,30 @@ class ServiceMenuItemController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create(Service $service)
+    public function create()
     {
-        return view('admin.menu.create', compact('service'));
+        $services = Service::all(); // prendi tutti i servizi
+        return view('admin.menu.create', compact('services'));
     }
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request, Service $service)
+    public function store(Request $request)
     {
         $data = $request->validate([
+            'service_id' => 'required|exists:services,id',
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
             'price' => 'required|numeric',
         ]);
 
+        $service = Service::findOrFail($data['service_id']);
         $service->menu_items()->create($data);
 
-        return redirect()->route('services.menu-items.create', $service->id)
+        return redirect()->route('dashboard.menu.index', $service->id)
             ->with('success', 'Voce menu aggiunta!');
     }
+
 
     /**
      * Display the specified resource.
@@ -73,14 +77,17 @@ class ServiceMenuItemController extends Controller
 
         $menu->update($data);
 
-        return redirect()->route('menu.index')->with('success', 'Voce menu aggiornata!');
+        return redirect()->route('dashboard.menu.index')->with('success', 'Voce menu aggiornata!');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy($id)
     {
-        //
+        $menu = ServiceMenuItem::findOrFail($id);
+        $menu->delete();
+
+        return redirect()->route('dashboard.menu.index')->with('success', 'Voce menu eliminata!');
     }
 }

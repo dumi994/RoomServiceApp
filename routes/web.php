@@ -5,42 +5,31 @@ use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ServiceMenuItemController;
 use App\Models\Service;
+use App\Http\Controllers\Admin\ServiceController as AdminServiceController;
 
 Route::get('/', function () {
-
     return view('home');
 });
 
-/* Route::get('/services', [ServiceController::class, 'index']); */
-Route::resource('/services', ServiceController::class);
-Route::resource('/orders', OrderController::class);
-Route::get('/orders/{order}/status', [OrderController::class, 'getStatus'])->name('orders.status');
-Route::post('/orders/{id}/update-status', [OrderController::class, 'update']);
+// Frontend
+Route::resource('services', ServiceController::class);
+Route::resource('orders', OrderController::class);
+Route::get('orders/{order}/status', [OrderController::class, 'getStatus'])->name('orders.status');
+Route::post('orders/{id}/update-status', [OrderController::class, 'update']);
 
-/* DA RIVEDERE QUI */
-Route::get('/services/{service}/menu-items/create', [ServiceMenuItemController::class, 'create'])->name('services.menu-items.create');
-Route::post('/services/{service}/menu-items', [ServiceMenuItemController::class, 'store'])->name('services.menu-items.store');
-Route::post('/services/{service}/upload-images', [ServiceController::class, 'uploadImages'])->name('services.upload.images');
-Route::delete('/dashboard/services/{service}/delete-images', [ServiceController::class, 'deleteImage']);
-Route::get('/dashboard/services/{service}/images', [ServiceController::class, 'imagesList']);
+// Admin
+Route::prefix('dashboard')->name('dashboard.')->group(function () {
+    Route::get('/', [OrderController::class, 'index'])->name('home');
 
-/* ADMIN */
+    Route::resource('/menu', ServiceMenuItemController::class)->names('menu');
+    Route::resource('/services', AdminServiceController::class)->names('services');
 
-
-Route::get('/dashboard', [OrderController::class, 'index']);
-
-/* Route::get('/dashboard/menu', function () {
-
-    return view('admin/menu/index');
-}); */
-/* Route::get('/dashboard/menu', [ServiceMenuItemController::class, 'index']); */
-Route::resource('/dashboard/menu', ServiceMenuItemController::class);
-/* Route::get('/dashboard/services', function () {
-
-    return view('admin/service/index');
-}); */
-Route::get('/dashboard/services', [ServiceController::class, 'adminIndex'])->name('dashboard.services');
-
-
+    Route::post('/services/{service}/upload-images', [AdminServiceController::class, 'uploadImages'])
+        ->name('services.upload.images');
+    Route::delete('/services/{service}/delete-images', [AdminServiceController::class, 'deleteImage'])
+        ->name('services.delete.image');
+    Route::get('/services/{service}/images', [AdminServiceController::class, 'imagesList'])
+        ->name('services.images');
+});
 
 require __DIR__ . '/auth.php';

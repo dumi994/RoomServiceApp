@@ -919,94 +919,110 @@ jQuery(document).ready(function () {
   };
 
   function init() {
-    var sh = jQuery("#de-sidebar").css("height");
-    var dh = jQuery(window).innerHeight();
-    var h = parseInt(sh) - parseInt(dh);
-    var header_height = parseInt(jQuery("header").height(), 10);
-    var screen_height = parseInt(jQuery(window).height(), 10);
-    var header_mt = screen_height - header_height;
-    var mq = window.matchMedia("(min-width: 993px)");
-    var ms = window.matchMedia("(min-width: 768px)");
+    // 1. Controllo iniziale degli elementi essenziali con debug
+    var $header = jQuery("header");
+    var $sidebar = jQuery("#de-sidebar");
 
-    window.addEventListener("scroll", function (e) {
+    if (!$header.length) {
+      console.warn("Elemento 'header' non trovato nel DOM");
+      return;
+    }
+
+    if (!$sidebar.length) {
+      console.warn("Elemento '#de-sidebar' non trovato nel DOM");
+      return;
+    }
+
+    // 2. Calcoli iniziali solo se gli elementi esistono
+    try {
+      var sh = $sidebar.css("height");
+      var dh = jQuery(window).innerHeight();
+      var h = parseInt(sh) - parseInt(dh);
+      var header_height = parseInt($header.height(), 10);
+      var screen_height = parseInt(jQuery(window).height(), 10);
+      var header_mt = screen_height - header_height;
+      var header_mt_half = header_mt / 2;
+      var mq = window.matchMedia("(min-width: 993px)");
+      var ms = window.matchMedia("(min-width: 768px)");
+      var vscroll = 0;
+
+      // 3. Inizializzazione stili solo per desktop
       if (mq.matches) {
-        var distanceY =
-            window.pageYOffset || document.documentElement.scrollTop,
-          shrinkOn = 100,
-          header = document.querySelector("header");
-        if (distanceY > shrinkOn) {
-          classie.add(header, "smaller");
-        } else {
-          if (classie.has(header, "smaller")) {
-            classie.remove(header, "smaller");
-          }
-        }
+        jQuery(".header-bottom, .header-center").css({
+          position: "absolute",
+          top: header_mt,
+        });
       }
 
-      if (mq.matches) {
-        jQuery("header").addClass("clone", 1000, "easeOutBounce");
+      // 4. Gestione dello scroll con try-catch
+      window.addEventListener("scroll", function () {
+        try {
+          if (!mq.matches) return;
 
-        // header autoshow on scroll begin
-        var $document = $(document);
-        var vscroll = 0;
+          var distanceY =
+            window.pageYOffset || document.documentElement.scrollTop;
 
-        if ($document.scrollTop() >= 50 && vscroll == 0) {
-          jQuery("header.autoshow").removeClass("scrollOff");
-          jQuery("header.autoshow").addClass("scrollOn");
-          vscroll = 1;
-        } else {
-          jQuery("header.autoshow").removeClass("scrollOn");
-          jQuery("header.autoshow").addClass("scrollOff");
-          vscroll = 0;
-        }
-        // header autoshow on scroll close
-
-        // header bottom on scroll begin
-        var header_height = parseInt(jQuery("header").height(), 10);
-        var screen_height = parseInt(jQuery(window).height(), 10);
-        var header_mt = screen_height - header_height;
-        var header_mt_half = header_mt / 2;
-
-        if ($document.scrollTop() >= header_mt) {
-          jQuery(".header-bottom").css("position", "fixed");
-          jQuery(".header-bottom").css("top", "0");
-        } else if ($document.scrollTop() <= header_mt) {
-          jQuery(".header-bottom").css("position", "absolute");
-          jQuery(".header-bottom").css("top", header_mt);
-        }
-
-        if ($document.scrollTop() >= header_mt_half) {
-          jQuery(".header-center").css("position", "fixed");
-          jQuery(".header-center").css("top", "0");
-        } else if ($document.scrollTop() <= header_mt_half) {
-          jQuery(".header-center").css("position", "absolute");
-          jQuery(".header-center").css("top", header_mt_half);
-        }
-        // header bottom on scroll close
-
-        // side header on scroll begin
-        if (jQuery("header").hasClass("side-header")) {
-          if (jQuery(document).scrollTop() >= h) {
-            jQuery("#de-sidebar").css("position", "fixed");
-            if (parseInt(sh) > parseInt(dh)) {
-              jQuery("#de-sidebar").css("top", -h);
-            }
-            jQuery("#main").addClass("col-md-offset-3");
+          // 4.1 Gestione classe 'smaller'
+          if (distanceY > 100) {
+            $header.addClass("smaller");
           } else {
-            jQuery("#de-sidebar").css("position", "absolute ");
-            if (parseInt(sh) > parseInt(dh)) {
-              jQuery("#de-sidebar").css("top", 0);
-            }
-            jQuery("#main").removeClass("col-md-offset-3");
+            $header.removeClass("smaller");
           }
-        }
-        // side header on scroll close
-      }
-    });
 
-    if (mq.matches) {
-      jQuery(".header-bottom,.header-center").css("position", "absolute");
-      jQuery(".header-bottom,.header-center").css("top", header_mt);
+          // 4.2 Header autoshow
+          if ($header.hasClass("autoshow")) {
+            if (jQuery(document).scrollTop() >= 50 && vscroll === 0) {
+              $header.removeClass("scrollOff").addClass("scrollOn");
+              vscroll = 1;
+            } else {
+              $header.removeClass("scrollOn").addClass("scrollOff");
+              vscroll = 0;
+            }
+          }
+
+          // 4.3 Header bottom
+          var $headerBottom = jQuery(".header-bottom");
+          if ($headerBottom.length) {
+            $headerBottom.css({
+              position:
+                $document.scrollTop() >= header_mt ? "fixed" : "absolute",
+              top: $document.scrollTop() >= header_mt ? "0" : header_mt,
+            });
+          }
+
+          // 4.4 Header center
+          var $headerCenter = jQuery(".header-center");
+          if ($headerCenter.length) {
+            $headerCenter.css({
+              position:
+                $document.scrollTop() >= header_mt_half ? "fixed" : "absolute",
+              top:
+                $document.scrollTop() >= header_mt_half ? "0" : header_mt_half,
+            });
+          }
+
+          // 4.5 Side header
+          if ($header.hasClass("side-header")) {
+            if ($document.scrollTop() >= h) {
+              $sidebar.css({
+                position: "fixed",
+                top: parseInt(sh) > parseInt(dh) ? -h : "0",
+              });
+              jQuery("#main").addClass("col-md-offset-3");
+            } else {
+              $sidebar.css({
+                position: "absolute",
+                top: "0",
+              });
+              jQuery("#main").removeClass("col-md-offset-3");
+            }
+          }
+        } catch (e) {
+          console.error("Errore durante l'animazione dello scroll:", e);
+        }
+      });
+    } catch (e) {
+      console.error("Errore nell'inizializzazione:", e);
     }
   }
   window.onload = init();

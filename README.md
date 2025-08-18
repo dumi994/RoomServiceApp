@@ -56,12 +56,10 @@ OrderItem → ServiceMenuItem: relazione Many-to-One (molti a uno)
 
 <!--  -->
 
-//storage
-//cambia immagini per ogni servizio selezionato
-//correggi link per dashboard
+// correggi bug invio ordine
 // metti autenticazione
 //correggi bug apertura menu frontend
-
+// quando non selezioni elementi ti fa comunque andare avanti con ordine
 //backend
 //metti visualizzazione ordine in base a stato
 //notifica nuovo ordine

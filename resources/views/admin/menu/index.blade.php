@@ -3,71 +3,19 @@
         <div class="container-fluid">
             <!-- Small boxes (Stat box) -->
             <div class="row">
-                <div class="col-lg-3 col-6">
-                    <!-- small box -->
-                    <div class="small-box bg-info">
-                        <div class="inner">
-                            <h3>150</h3>
-
-                            <p>New Orders</p>
-                        </div>
-                        <div class="icon">
-                            <i class="ion ion-bag"></i>
-                        </div>
-                        <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-                    </div>
-                </div>
-                <!-- ./col -->
-                <div class="col-lg-3 col-6">
-                    <!-- small box -->
-                    <div class="small-box bg-success">
-                        <div class="inner">
-                            <h3>53<sup style="font-size: 20px">%</sup></h3>
-
-                            <p>Bounce Rate</p>
-                        </div>
-                        <div class="icon">
-                            <i class="ion ion-stats-bars"></i>
-                        </div>
-                        <a href="#" class="small-box-footer">More info <i
-                                class="fas fa-arrow-circle-right"></i></a>
-                    </div>
-                </div>
-                <!-- ./col -->
-                <div class="col-lg-3 col-6">
-                    <!-- small box -->
-                    <div class="small-box bg-warning">
-                        <div class="inner">
-                            <h3>44</h3>
-
-                            <p>User Registrations</p>
-                        </div>
-                        <div class="icon">
-                            <i class="ion ion-person-add"></i>
-                        </div>
-                        <a href="#" class="small-box-footer">More info <i
-                                class="fas fa-arrow-circle-right"></i></a>
-                    </div>
-                </div>
-                <!-- ./col -->
-                <div class="col-lg-3 col-6">
-                    <!-- small box -->
-                    <div class="small-box bg-danger">
-                        <div class="inner">
-                            <h3>65</h3>
-
-                            <p>Unique Visitors</p>
-                        </div>
-                        <div class="icon">
-                            <i class="ion ion-pie-graph"></i>
-                        </div>
-                        <a href="#" class="small-box-footer">More info <i
-                                class="fas fa-arrow-circle-right"></i></a>
-                    </div>
-                </div>
-                <!-- ./col -->
+                <!-- (i tuoi small box esistenti...) -->
             </div>
             <!-- /.row -->
+
+            <!-- Bottone aggiungi nuovo item -->
+            <div class="row mb-3">
+                <div class="col-12">
+                    <a href="{{ route('dashboard.menu.create') }}" class="btn btn-primary">
+                        + Aggiungi nuovo piatto
+                    </a>
+                </div>
+            </div>
+
             <!-- Main row -->
             <div class="row d-block">
                 <table id="example" class="display w-100">
@@ -97,7 +45,7 @@
                                             </a>
                                         </div>
                                         <div class="col-6">
-                                            <form action="{{ route('menu.destroy', $i->id) }}" method="POST"
+                                            <form action="{{ route('dashboard.menu.destroy', $i->id) }}" method="POST"
                                                 class="delete-form">
                                                 @csrf
                                                 @method('DELETE')
@@ -111,10 +59,8 @@
                                         </div>
                                     </div>
                                 </td>
-
                             </tr>
                         @endforeach
-
                     </tbody>
                     <tfoot>
                         <tr>
@@ -123,7 +69,6 @@
                             <th>Prezzo</th>
                             <th>Attivo</th>
                             <th>Azioni</th>
-
                         </tr>
                     </tfoot>
                 </table>
@@ -138,6 +83,26 @@
                 order: [
                     [3, 'desc']
                 ]
+            });
+
+            $('.delete-form').on('submit', function(e) {
+                e.preventDefault(); // blocca il submit per mostrare conferma
+                const form = this;
+
+                Swal.fire({
+                    title: 'Sei sicuro?',
+                    text: "Questa azione non può essere annullata!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#3085d6',
+                    confirmButtonText: 'Sì, elimina!',
+                    cancelButtonText: 'Annulla'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        form.submit(); // invia form se confermato
+                    }
+                });
             });
         </script>
     @endsection

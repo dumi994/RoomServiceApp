@@ -26,13 +26,17 @@
 .list-group-item {
   height: 155px;
 }
-.menu-checkbox:checked + label {
-  background-color: #9c6114; /* verde chiaro, esempio */
-  color: white; /* testo verde scuro */
+.menu-item-selected {
+  background-color: #ca8e46; /* marrone scuro */
+  color: white; /* testo bianco per contrasto */
+}
+/* .menu-checkbox:checked + label {
+  background-color: #ca8e46;
+  color: white;
   border-radius: 4px;
 
   display: block;
-}
+} */
 .active-menu-item {
   background-color: #9c6114;
   color: white;
@@ -276,4 +280,16 @@
   position: absolute;
   right: 5px;
   top: 5px;
+}
+
+/* MODALE */
+@media (max-width: 991.98px) {
+  body.modal-open {
+    padding-right: 0 !important;
+    overflow: hidden;
+  }
+
+  .modal {
+    padding-right: 0 !important;
+  }
 }

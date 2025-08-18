@@ -24,6 +24,8 @@ class OrderController extends Controller
     // OrderController.php
     public function store(Request $request)
     {
+        /* \Log::info('STORE CALLED', $request->all());
+        dd('Entrato nel controller!', $request->all()); */
         $validated = $request->validate([
             'first_name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',

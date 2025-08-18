@@ -8,7 +8,7 @@
             <div class="alert alert-success">{{ session('success') }}</div>
         @endif
 
-        <form action="{{ route('menu.update', [$menu->id, $menu->id]) }}" method="POST"
+        <form action="{{ route('dashboard.menu.update', [$menu->id, $menu->id]) }}" method="POST"
             class="p-4 border rounded shadow-sm bg-white">
             @csrf
             @method('PUT')
@@ -55,7 +55,7 @@
                 @enderror
             </div>
             <div class="d-flex justify-content-between align-items-center">
-                <a href="{{ route('menu.index') }}" class="text-secondary text-decoration-none">
+                <a href="{{ route('dashboard.menu.index') }}" class="text-secondary text-decoration-none">
                     ← Torna alle voci menu
                 </a>
 

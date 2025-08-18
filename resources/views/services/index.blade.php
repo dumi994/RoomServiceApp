@@ -38,9 +38,9 @@
                                 <span class="small-border"></span>
                             </h2>
 
-                            <p>Il servizio in camera e in piscina de L’Andana Resort offre un’esperienza esclusiva e
+                            <p>Il servizio in camera e in piscina de L'Andana Resort offre un'esperienza esclusiva e
                                 curata nei minimi dettagli, permettendo agli ospiti di gustare piatti e bevande di alta
-                                qualità direttamente nel comfort della propria camera o a bordo piscina, in un’atmosfera
+                                qualità direttamente nel comfort della propria camera o a bordo piscina, in un'atmosfera
                                 rilassante e raffinata.
                             </p>
 
@@ -101,7 +101,7 @@
                                                     <strong>{{ $item->name }}</strong><br>
                                                     <small>{{ $item->description }}</small><br>
                                                     <span
-                                                        class="menu-item-price">€{{ number_format($item->price, 2, ',', '.') }}</span>
+                                                        class="menu-item-price text-black">€{{ number_format($item->price, 2, ',', '.') }}</span>
                                                 </label>
 
                                                 <input type="number" min="1" value="0"
@@ -112,9 +112,15 @@
                                         @endforeach
                                     </ul>
                                     <div class="text-center mt-5">
-                                        <button class="btn btn-primary" id="conferma-btn" data-toggle="modal"
-                                            data-target="#exampleModal">Conferma selezione</button>
+                                        <button type="button" class="btn btn-primary btn-conferma text-white"
+                                            data-service-id="{{ $service->id }}" data-bs-toggle="modal"
+                                            data-bs-target="#exampleModal">
+                                            Conferma selezione
+                                        </button>
                                     </div>
+                                @else
+                                    <h2 class="text-center text-black my-4">Servizio momentaneamente non disponibile, ci
+                                        scusiamo per il disagio.</h2>
                                 @endif
                             </div>
                         </div>
@@ -123,17 +129,14 @@
             </div>
         </section>
 
-        <!-- Modal -->
-        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-            aria-hidden="true">
-            <div class="modal-dialog" role="document">
+        <!-- Modale per inviare ordine -->
+        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="exampleModalLabel">Conferma Ordine</h5>
-                        <button type="button" class="btn-close close-modal" data-bs-dismiss="modal"
-                            aria-label="Close"></button>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-
                     <div class="modal-body">
                         <form id="order-form" action="{{ route('orders.store') }}" method="POST">
                             @csrf
@@ -158,11 +161,12 @@
                                 <textarea class="form-control" id="order_details" name="order_details" rows="3" required></textarea>
                             </div>
 
+                            <div id="hidden-items-container"></div>
+
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary close-modal"
+                                <button type="button" class="btn btn-secondary"
                                     data-bs-dismiss="modal">Chiudi</button>
-                                <input type="submit" class="btn btn-primary text-white" id="send-order"
-                                    value="Invia ordine" />
+                                <button type="submit" class="btn btn-primary">Invia ordine</button>
                             </div>
                         </form>
                     </div>
@@ -185,11 +189,10 @@
                 '/images/misc/2.jpg'
             ];
 
-            // Funzione per settare le immagini (usa tag img)
+            // Funzione per settare le immagini
             function setImages(imgs) {
                 const img1 = imgs && imgs.length > 0 ? imgs[0] : defaultImgs[0];
                 const img2 = imgs && imgs.length > 1 ? imgs[1] : defaultImgs[1];
-
                 $('#service-image-1').attr('src', img1);
                 $('#service-image-2').attr('src', img2);
             }
@@ -205,12 +208,10 @@
                 const detailBox = $("#details-" + id);
 
                 if (detailBox.hasClass('d-none')) {
-                    // Nascondi gli altri dettagli
                     $('.service-details').not(detailBox).slideUp(300, function() {
                         $(this).addClass('d-none');
                     });
 
-                    // Mostra questo dettaglio
                     detailBox.removeClass('d-none').hide().slideDown(300);
 
                     const service = services.find(s => s.id == id);
@@ -226,71 +227,124 @@
                         });
                     }
                 } else {
-                    // Nascondi dettaglio corrente
                     detailBox.slideUp(300, function() {
                         detailBox.addClass('d-none');
                     });
                 }
             });
 
-
             // Gestione checkboxes per abilitare/disabilitare input quantità
             $(document).on('change', '.menu-checkbox', function() {
                 const checkbox = $(this);
                 const itemId = checkbox.data('item-id');
                 const qtyInput = $('.quantity-input[data-item-id="' + itemId + '"]');
+                const listItem = checkbox.closest('li');
+                const menuItemPrice = listItem.find('.menu-item-price');
 
                 if (checkbox.is(':checked')) {
                     qtyInput.prop('disabled', false).val(1).show();
+                    listItem.addClass('menu-item-selected');
+                    menuItemPrice.addClass('text-white');
                 } else {
                     qtyInput.prop('disabled', true).val(0).hide();
+                    listItem.removeClass('menu-item-selected');
+                    menuItemPrice.removeClass('text-white');
                 }
             });
 
-            // Gestione submit form: raccogli i dati selezionati
-            $('#order-form').submit(function(e) {
-                const selectedItems = [];
+            // Inizializzazione del modal (UNA SOLA VOLTA)
+            const orderModal = new bootstrap.Modal('#exampleModal');
 
-                $('.menu-checkbox:checked').each(function() {
+            // UNICO handler per "Conferma selezione"
+            $(document).on('click', '.btn-conferma', function(e) {
+                e.preventDefault();
+                console.log("Conferma cliccata!");
+
+                const serviceId = $(this).data('service-id');
+                const selectedItems = [];
+                let orderDetails = "";
+
+                // Seleziona solo item con checkbox spuntati
+                $(`#details-${serviceId} .menu-checkbox:checked`).each(function() {
                     const checkbox = $(this);
                     const itemId = checkbox.data('item-id');
-                    const qtyInput = $('.quantity-input[data-item-id="' + itemId + '"]');
+                    const qtyInput = $(
+                        `#details-${serviceId} .quantity-input[data-item-id="${itemId}"]`);
                     const quantity = parseInt(qtyInput.val());
+                    const itemName = checkbox.closest('li').find('strong').text();
+                    const itemPrice = checkbox.closest('li').find('.menu-item-price').text();
 
                     if (quantity > 0) {
+                        let parsedPrice = parseFloat(
+                            itemPrice.replace('€', '').replace('.', '').replace(',', '.')
+                        );
+
                         selectedItems.push({
                             id: itemId,
-                            quantity: quantity
+                            quantity: quantity,
+                            name: itemName,
+                            price: parsedPrice
                         });
+
+                        orderDetails += `${quantity}x ${itemName} - ${itemPrice}\n`;
                     }
                 });
 
                 if (selectedItems.length === 0) {
-                    e.preventDefault();
                     alert("Seleziona almeno un elemento e imposta una quantità valida.");
                     return false;
                 }
 
-                // Aggiungere dati al form nascosti
-                $('#order-form').find('input[name="items"]').remove();
+                // Calcola il totale
+                const total = selectedItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+                orderDetails += `\nTOTALE: €${total.toFixed(2).toString().replace('.', ',')}`;
+
+                // Popola campo order_details + hidden inputs
+                $('#order_details').val(orderDetails);
+                $('#hidden-items-container').empty();
+
                 selectedItems.forEach(function(item, index) {
-                    $('#order-form').append(
-                        $('<input>')
-                        .attr('type', 'hidden')
-                        .attr('name', `items[${index}][id]`)
-                        .val(item.id)
-                    );
-                    $('#order-form').append(
-                        $('<input>')
-                        .attr('type', 'hidden')
-                        .attr('name', `items[${index}][quantity]`)
-                        .val(item.quantity)
-                    );
+                    $('#hidden-items-container').append(`
+                <input type="hidden" name="items[${index}][id]" value="${item.id}">
+                <input type="hidden" name="items[${index}][quantity]" value="${item.quantity}">
+            `);
                 });
 
-                return true;
+                console.log("SelectedItems:", selectedItems);
+                console.log("Hidden inputs pronti");
+
+                // Mostra la modale
+                orderModal.show();
+            });
+
+            // UNICO handler per invio form
+            $('#order-form').on('submit', function(e) {
+                console.log("Tentativo di invio form...");
+
+                if ($('#hidden-items-container').children().length === 0) {
+                    e.preventDefault();
+                    alert("Per favore, seleziona almeno un elemento dal menu");
+                    console.warn("Blocca submit: hidden-items-container è vuoto.");
+                    return false;
+                }
+
+                // Stato di caricamento sul bottone
+                const submitBtn = $(this).find('button[type="submit"]');
+                submitBtn.prop('disabled', true).html(`
+            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+            Invio in corso...
+        `);
+
+                console.log("Form inviato a server...");
+                return true; // il browser invia il form normalmente
+            });
+
+            // Reset del form quando la modale viene chiusa
+            $('#exampleModal').on('hidden.bs.modal', function() {
+                $('#order-form')[0].reset();
+                $('#hidden-items-container').empty();
+                $('#order-form button[type="submit"]').prop('disabled', false).text('Invia ordine');
             });
         });
     </script>
-
 </x-layout>

@@ -64,10 +64,10 @@
     <script>
         jQuery(function($) {
             // Lista tutti gli elementi visibili (display non none e opacity > 0)
-            Array.from(document.querySelectorAll('*')).filter(el => {
-                const style = window.getComputedStyle(el);
-                return style.display !== 'none' && style.opacity !== '0';
-            }).forEach(el => console.log(el, el.className));
+            /*   Array.from(document.querySelectorAll('*')).filter(el => {
+                  const style = window.getComputedStyle(el);
+                  return style.display !== 'none' && style.opacity !== '0';
+              }).forEach(el => console.log(el, el.className)); */
 
             var slides = [];
             slides.push({
