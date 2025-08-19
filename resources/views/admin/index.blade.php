@@ -2,7 +2,7 @@
     <section class="content">
         <div class="container-fluid">
             <!-- Small boxes (Stat box) -->
-            <div class="row">
+            {{--  <div class="row">
                 <div class="col-lg-3 col-6">
                     <!-- small box -->
                     <div class="small-box bg-info">
@@ -66,7 +66,7 @@
                     </div>
                 </div>
                 <!-- ./col -->
-            </div>
+            </div> --}}
             <!-- /.row -->
             <!-- Main row -->
             <div class="row">
@@ -103,6 +103,9 @@
                         };
                         data.forEach(order => {
                             const badgeClass = statusBadgeClass[order.status] || 'bg-secondary';
+                            // Controllo per determinare il tipo di servizio
+                            const serviceType = /[a-zA-Z]/.test(order.room_number) ? 'Pool Service' :
+                                'Room Service';
                             html += `
                             <div class="col-4" id="order-${order.id}">
                                 <div class="order-card">
@@ -113,7 +116,7 @@
                                     <div class="order-body">
                                         <p><strong>Cliente:</strong> ${order.first_name} ${order.last_name}</p>
                                         <p><strong>Camera:</strong> ${order.room_number}</p>
-    
+                                         <p><strong>Servizio:</strong> ${serviceType}</p>
                                         <p><strong>Ordine:</strong> ${order.order_details}</p>
                                     </div>
                                 </div>

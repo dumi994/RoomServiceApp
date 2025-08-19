@@ -414,8 +414,6 @@
 
                 console.log("Tentativo di invio form...");
                 console.log("Hidden inputs:", $('#hidden-items-container').html());
-                // 👉 RIMOSSO blocco su hidden-items-container
-                // (ora il form va sempre al server, anche se vuoto)
 
                 // Stato di caricamento sul bottone
                 const submitBtn = $(this).find('button[type="submit"]');
@@ -425,8 +423,9 @@
          `);
 
                 console.log("Form inviato al server...");
-                return true; // il browser lo invia normalmente
+                return true;
             });
+
 
             // Reset del form quando la modale viene chiusa
             $('#exampleModal').on('hidden.bs.modal', function() {

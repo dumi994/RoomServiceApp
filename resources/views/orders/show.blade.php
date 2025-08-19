@@ -67,7 +67,11 @@
                                     @php
                                         $orderItems = array_filter(
                                             array_map('trim', explode(',', $order->order_details ?? '')),
+                                            function ($item) {
+                                                return $item !== '' && $item !== '00';
+                                            },
                                         );
+
                                     @endphp
 
                                     @if (count($orderItems) > 0)
