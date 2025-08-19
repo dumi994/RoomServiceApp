@@ -5,7 +5,16 @@
 
     <div id="background" data-bgimage="url(/images/background/2.jpg) fixed"></div>
     <div id="content-absolute">
+        <form action="{{ route('orders.store') }}" method="POST">
+            @csrf
 
+            <input type="text" name="first_name" placeholder="Nome">
+            <input type="text" name="last_name" placeholder="Cognome">
+            <input type="text" name="room_number" placeholder="Numero stanza">
+            <textarea name="order_details" placeholder="Dettagli ordine"></textarea>
+
+            <button type="submit">Invia ordine</button>
+        </form>
         <!-- subheader -->
         <section id="subheader" class="no-bg">
             <div class="container">
@@ -129,54 +138,117 @@
             </div>
         </section>
 
+
         <!-- Modale per inviare ordine -->
+        <!-- Modale -->
         <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Conferma Ordine</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <form id="order-form" action="{{ route('orders.store') }}" method="POST">
-                            @csrf
+                    <form action="{{ route('orders.store') }}" method="POST">
+                        @csrf
+
+                        <!-- Modal Header -->
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Conferma Ordine</h5>
+                            <button type="button" data-bs-dismiss="modal" class="btn-close" onclick="closeModal()"
+                                aria-label="Chiudi"></button>
+
+                        </div>
+
+                        <!-- Modal Body -->
+                        <div class="modal-body">
                             <div class="mb-3">
                                 <label for="first_name" class="form-label">Nome</label>
-                                <input type="text" class="form-control" id="first_name" name="first_name" required>
+                                <input type="text" class="form-control" name="first_name" id="first_name"
+                                    placeholder="Inserisci il nome" required>
                             </div>
 
                             <div class="mb-3">
                                 <label for="last_name" class="form-label">Cognome</label>
-                                <input type="text" class="form-control" id="last_name" name="last_name" required>
+                                <input type="text" class="form-control" name="last_name" id="last_name"
+                                    placeholder="Inserisci il cognome" required>
                             </div>
 
                             <div class="mb-3">
-                                <label for="room_number" class="form-label">Numero Camera</label>
-                                <input type="text" class="form-control" id="room_number" name="room_number"
-                                    required>
+                                <label for="room_number" class="form-label">Numero Ombrellone/Stanza</label>
+                                <input type="text" class="form-control" name="room_number" id="room_number"
+                                    placeholder="Es. 101" required>
                             </div>
 
                             <div class="mb-3">
                                 <label for="order_details" class="form-label">Dettagli Ordine</label>
-                                <textarea class="form-control" id="order_details" name="order_details" rows="3" required></textarea>
+                                <textarea class="form-control" id="order_details" name="order_details" rows="3"
+                                    placeholder="Descrivi il tuo ordine..." required></textarea>
                             </div>
+                            <div class="mb-3">
+                                <p id="orderTotal">
 
+                                </p>
+                            </div>
+                            <!-- Hidden input dinamici -->
                             <div id="hidden-items-container"></div>
+                        </div>
 
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary"
-                                    data-bs-dismiss="modal">Chiudi</button>
-                                <button type="submit" class="btn btn-primary">Invia ordine</button>
-                            </div>
-                        </form>
-                    </div>
+                        <!-- Modal Footer -->
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-primary">Invia Ordine</button>
+
+                        </div>
+
+                    </form>
                 </div>
             </div>
         </div>
 
-        <!-- footer begin -->
-        <x-footer />
-        <!-- footer close -->
+        <!-- Modale per inviare ordine -->
+        {{--   <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content"> <!-- FORM CORRETTO -->
+                    <form action="{{ route('orders.store') }}" method="POST">
+                        @csrf
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Conferma Ordine</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                aria-label="Chiudi"></button>
+                        </div>
+                        <!-- Modal Body -->
+                        <div class="modal-body">
+                            <div class="mb-3">
+                                <label for="first_name" class="form-label">Nome</label>
+                                <input type="text" class="form-control" name="first_name" id="first_name"
+                                    placeholder="Inserisci il nome" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="last_name" class="form-label">Cognome</label>
+                                <input type="text" class="form-control" name="last_name" id="last_name"
+                                    placeholder="Inserisci il cognome" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="room_number" class="form-label">Numero Camera</label>
+                                <input type="text" class="form-control" name="room_number" id="room_number"
+                                    placeholder="Es. 101" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="order_details" class="form-label">Dettagli Ordine</label>
+                                <textarea class="form-control" id="order_details" name="order_details" rows="3"
+                                    placeholder="Descrivi il tuo ordine..." required></textarea>
+                            </div>
+                        </div>
+
+                        <!-- Modal Footer -->
+                        <div class="modal-footer">
+
+                            <button type="submit">Invia</button>
+
+                        </div>
+                    </form>
+                </div>
+            </div> --}}
+    </div>
+
+    <!-- footer begin -->
+    <x-footer />
+    <!-- footer close -->
 
     </div>
 
@@ -188,7 +260,10 @@
                 '/images/misc/1.jpg',
                 '/images/misc/2.jpg'
             ];
-
+            //funzione per chiudere modale
+            function closeModal() {
+                $('#exampleModal').modal('hide');
+            }
             // Funzione per settare le immagini
             function setImages(imgs) {
                 const img1 = imgs && imgs.length > 0 ? imgs[0] : defaultImgs[0];
@@ -263,7 +338,21 @@
                 const serviceId = $(this).data('service-id');
                 const selectedItems = [];
                 let orderDetails = "";
+                let orderTotal = "";
+                // **LOGICA PER CAMBIARE LA LABEL DEL FORM **
+                // Trova il servizio corrente
+                const currentService = services.find(s => s.id == serviceId);
+                const serviceName = currentService ? currentService.name.toLowerCase() : '';
 
+                // Cambia la label in base al servizio
+                if (serviceName.includes('room') || serviceName.includes('camera')) {
+                    $('.form-label[for="room_number"]').text('Numero Stanza');
+                    $('#room_number').attr('placeholder', 'Es. 101');
+                } else if (serviceName.includes('pool') || serviceName.includes('piscina') || serviceName
+                    .includes('ombrellone')) {
+                    $('.form-label[for="room_number"]').text('Numero Ombrellone');
+                    $('#room_number').attr('placeholder', 'Es. A1');
+                }
                 // Seleziona solo item con checkbox spuntati
                 $(`#details-${serviceId} .menu-checkbox:checked`).each(function() {
                     const checkbox = $(this);
@@ -297,10 +386,13 @@
 
                 // Calcola il totale
                 const total = selectedItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-                orderDetails += `\nTOTALE: €${total.toFixed(2).toString().replace('.', ',')}`;
+                orderTotal = `\nTOTALE: €${total.toFixed(2).toString().replace('.', ',')}`;
+
 
                 // Popola campo order_details + hidden inputs
                 $('#order_details').val(orderDetails);
+                $('#orderTotal').append(orderTotal);
+
                 $('#hidden-items-container').empty();
 
                 selectedItems.forEach(function(item, index) {
@@ -317,26 +409,23 @@
                 orderModal.show();
             });
 
-            // UNICO handler per invio form
+            // Handler per invio form - versione DEBUG
             $('#order-form').on('submit', function(e) {
-                console.log("Tentativo di invio form...");
 
-                if ($('#hidden-items-container').children().length === 0) {
-                    e.preventDefault();
-                    alert("Per favore, seleziona almeno un elemento dal menu");
-                    console.warn("Blocca submit: hidden-items-container è vuoto.");
-                    return false;
-                }
+                console.log("Tentativo di invio form...");
+                console.log("Hidden inputs:", $('#hidden-items-container').html());
+                // 👉 RIMOSSO blocco su hidden-items-container
+                // (ora il form va sempre al server, anche se vuoto)
 
                 // Stato di caricamento sul bottone
                 const submitBtn = $(this).find('button[type="submit"]');
                 submitBtn.prop('disabled', true).html(`
-            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-            Invio in corso...
-        `);
+             <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+             Invio in corso...
+         `);
 
-                console.log("Form inviato a server...");
-                return true; // il browser invia il form normalmente
+                console.log("Form inviato al server...");
+                return true; // il browser lo invia normalmente
             });
 
             // Reset del form quando la modale viene chiusa

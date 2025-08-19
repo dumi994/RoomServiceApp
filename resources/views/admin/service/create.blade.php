@@ -32,7 +32,16 @@
                 <input class="form-check-input" type="checkbox" name="available" id="available" value="1">
                 <label class="form-check-label" for="available">Disponibile</label>
             </div>
-
+            <!-- MENU ITEMS -->
+            <label for="menu_items">Menu Items:</label>
+            <select name="menu_item_ids[]" multiple>
+                @foreach ($menuItems as $item)
+                    <option value="{{ $item->id }}"
+                        {{ isset($service) && $service->menu_items->contains($item->id) ? 'selected' : '' }}>
+                        {{ $item->name }}
+                    </option>
+                @endforeach
+            </select>
             <div class="mb-4">
                 <label for="images" class="form-label">Carica immagini (max 2)</label>
                 <input type="file" name="images[]" id="images" class="form-control" multiple accept="image/*" />

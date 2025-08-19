@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use App\Models\Service;
+use App\Models\ServiceMenuItem;
 
 class ServiceController extends Controller
 {
@@ -24,8 +25,8 @@ class ServiceController extends Controller
 
     public function create()
     {
-
-        return view('admin.service.create'); // puoi anche passare dati alla view
+        $menuItems = ServiceMenuItem::all(); // tutti i menu items
+        return view('admin.service.create', compact('menuItems'));
     }
 
     public function store(Request $request)
@@ -62,7 +63,9 @@ class ServiceController extends Controller
         // Salviamo i path delle immagini nell'array 'images' (assumendo che la colonna 'images' sia JSON)
         $service->images = $finalImages;
         $service->save();
-
+        if ($request->has('menu_item_ids')) {
+            $service->menu_items()->sync($request->menu_item_ids);
+        }
         return redirect()->route('services.menu-items.create', $service->id)
             ->with('success', 'Service creato! Ora aggiungi le voci menu.');
     }
@@ -81,7 +84,8 @@ class ServiceController extends Controller
      */
     public function edit(Service $service)
     {
-        return view('admin.service.edit', compact('service'));
+        $menuItems = ServiceMenuItem::all();
+        return view('admin.service.edit', compact('service', 'menuItems'));
     }
     public function update(Request $request, string $id)
     {
@@ -92,11 +96,17 @@ class ServiceController extends Controller
             'available' => 'nullable|boolean',
         ]);
 
-        // checkbox disponibile
-        $data['available'] = $request->has('available') ? true : false;
+        $data['available'] = $request->has('available');
 
         $service = Service::findOrFail($id);
         $service->update($data);
+
+        // aggiorna menu items
+        if ($request->has('menu_item_ids')) {
+            $service->menu_items()->sync($request->menu_item_ids);
+        } else {
+            $service->menu_items()->sync([]);
+        }
 
         return redirect()
             ->route('dashboard.services.edit', $service->id)

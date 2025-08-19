@@ -98,15 +98,15 @@
                                 <td>
                                     <div class="row">
                                         <div class="col-6">
-                                            <a href="/services/{{ $s->id }}/edit">
+                                            <a href="{{ route('dashboard.services.edit', $s->id) }}">
                                                 <span style="color:rgb(60, 60, 222)" class="material-symbols-outlined">
                                                     edit_square
                                                 </span>
                                             </a>
                                         </div>
                                         <div class="col-6">
-                                            <form action="{{ route('services.destroy', $s->id) }}" method="POST"
-                                                class="delete-form">
+                                            <form action="{{ route('dashboard.services.destroy', $s->id) }}"
+                                                method="POST" class="delete-form">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit" class="btn-no-style">

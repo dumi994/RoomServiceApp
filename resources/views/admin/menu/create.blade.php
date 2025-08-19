@@ -9,15 +9,6 @@
         <form action="{{ route('dashboard.menu.store') }}" method="POST" class="p-4 border rounded shadow-sm bg-white">
             @csrf
 
-            <div class="mb-4">
-                <label for="service_id" class="form-label">Seleziona Servizio</label>
-                <select id="service_id" name="service_id" class="form-select form-control-lg"required>
-                    <option value="" selected disabled>-- Scegli un servizio --</option>
-                    @foreach ($services as $service)
-                        <option value="{{ $service->id }}">{{ $service->name }}</option>
-                    @endforeach
-                </select>
-            </div>
 
             <div class="row mb-3">
                 <div class="col-md-6">

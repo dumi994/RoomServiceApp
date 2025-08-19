@@ -61,7 +61,16 @@
                     {{ old('available', $service->available) ? 'checked' : '' }}>
                 <label class="form-check-label" for="available">Disponibile</label>
             </div>
-
+            <!-- MENU ITEMS -->
+            <label for="menu_items">Menu Items:</label>
+            <select name="menu_item_ids[]" multiple>
+                @foreach ($menuItems as $item)
+                    <option value="{{ $item->id }}"
+                        {{ isset($service) && $service->menu_items->contains($item->id) ? 'selected' : '' }}>
+                        {{ $item->name }}
+                    </option>
+                @endforeach
+            </select>
             <div class="d-flex justify-content-between align-items-center">
                 <a href="{{ route('dashboard.services.index') }}" class="text-secondary text-decoration-none">
                     ← Torna ai servizi

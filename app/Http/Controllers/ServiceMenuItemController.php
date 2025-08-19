@@ -15,6 +15,7 @@ class ServiceMenuItemController extends Controller
     {
         //$menuItems = ServiceMenuItem::all(); // prendi tutti i servizi
         $menuItems = ServiceMenuItem::with('service')->get();
+
         return view('admin.menu.index', compact('menuItems'));
     }
 
@@ -32,7 +33,7 @@ class ServiceMenuItemController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'service_id' => 'required|exists:services,id',
+            'service_id' => 'nullable|exists:services,id',
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
             'price' => 'required|numeric',
@@ -69,7 +70,7 @@ class ServiceMenuItemController extends Controller
     public function update(Request $request, ServiceMenuItem $menu)
     {
         $data = $request->validate([
-            'name' => 'required|string|max:255',
+            'name' => 'nullable|string|max:255',
             'description' => 'nullable|string',
             'price' => 'required|numeric',
             'service_id' => 'required|exists:services,id',

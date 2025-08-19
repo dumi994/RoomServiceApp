@@ -34,7 +34,13 @@
                                 <td>{{ $i->name }}</td>
                                 <td>{{ $i->description }}</td>
                                 <td>{{ $i->price }} €</td>
-                                <td>{{ $i->service->name }}</td>
+                                <td>
+                                    @if ($i->service->isNotEmpty())
+                                        {{ $i->service->pluck('name')->join(', ') }}
+                                    @else
+                                        Nessuno
+                                    @endif
+                                </td>
                                 <td>
                                     <div class="row">
                                         <div class="col-6">

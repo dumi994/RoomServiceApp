@@ -15,6 +15,6 @@ class Service extends Model
     ];
     public function menu_items()
     {
-        return $this->hasMany(ServiceMenuItem::class, 'service_id');
+        return $this->belongsToMany(ServiceMenuItem::class, 'service_menu_item_service', 'service_id', 'menu_item_id');
     }
 }

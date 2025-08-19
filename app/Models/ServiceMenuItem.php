@@ -9,10 +9,10 @@ class ServiceMenuItem extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['service_id', 'name', 'description', 'price'];
+    protected $fillable = ['name', 'description', 'price'];
 
     public function service()
     {
-        return $this->belongsTo(Service::class);
+        return $this->belongsToMany(Service::class, 'service_menu_item_service', 'menu_item_id', 'service_id');
     }
 }

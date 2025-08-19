@@ -40,20 +40,7 @@
                     <div class="text-danger small">{{ $message }}</div>
                 @enderror
             </div>
-            <div class="mb-4">
-                <label for="service_id" class="form-label">Servizio associato</label>
-                <select name="service_id" id="service_id" class="form-select form-control-lg" required>
-                    @foreach ($services as $service)
-                        <option value="{{ $service->id }}"
-                            {{ old('service_id', $menu->service_id) == $service->id ? 'selected' : '' }}>
-                            {{ $service->name }}
-                        </option>
-                    @endforeach
-                </select>
-                @error('service_id')
-                    <div class="text-danger small">{{ $message }}</div>
-                @enderror
-            </div>
+
             <div class="d-flex justify-content-between align-items-center">
                 <a href="{{ route('dashboard.menu.index') }}" class="text-secondary text-decoration-none">
                     ← Torna alle voci menu
