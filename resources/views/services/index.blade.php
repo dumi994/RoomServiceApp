@@ -178,7 +178,7 @@
                             <div class="mb-3">
                                 <label for="order_details" class="form-label">Dettagli Ordine</label>
                                 <textarea class="form-control" id="order_details" name="order_details" rows="3"
-                                    placeholder="Descrivi il tuo ordine..." required></textarea>
+                                    placeholder="Descrivi il tuo ordine..." readonly required></textarea>
                             </div>
                             <div class="mb-3">
                                 <p id="orderTotal">
@@ -200,50 +200,6 @@
             </div>
         </div>
 
-        <!-- Modale per inviare ordine -->
-        {{--   <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content"> <!-- FORM CORRETTO -->
-                    <form action="{{ route('orders.store') }}" method="POST">
-                        @csrf
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLabel">Conferma Ordine</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                aria-label="Chiudi"></button>
-                        </div>
-                        <!-- Modal Body -->
-                        <div class="modal-body">
-                            <div class="mb-3">
-                                <label for="first_name" class="form-label">Nome</label>
-                                <input type="text" class="form-control" name="first_name" id="first_name"
-                                    placeholder="Inserisci il nome" required>
-                            </div>
-                            <div class="mb-3">
-                                <label for="last_name" class="form-label">Cognome</label>
-                                <input type="text" class="form-control" name="last_name" id="last_name"
-                                    placeholder="Inserisci il cognome" required>
-                            </div>
-                            <div class="mb-3">
-                                <label for="room_number" class="form-label">Numero Camera</label>
-                                <input type="text" class="form-control" name="room_number" id="room_number"
-                                    placeholder="Es. 101" required>
-                            </div>
-                            <div class="mb-3">
-                                <label for="order_details" class="form-label">Dettagli Ordine</label>
-                                <textarea class="form-control" id="order_details" name="order_details" rows="3"
-                                    placeholder="Descrivi il tuo ordine..." required></textarea>
-                            </div>
-                        </div>
-
-                        <!-- Modal Footer -->
-                        <div class="modal-footer">
-
-                            <button type="submit">Invia</button>
-
-                        </div>
-                    </form>
-                </div>
-            </div> --}}
     </div>
 
     <!-- footer begin -->
@@ -327,9 +283,10 @@
                 }
             });
 
-            // Inizializzazione del modal (UNA SOLA VOLTA)
+            // Inizializzazione del modal  
             const orderModal = new bootstrap.Modal('#exampleModal');
 
+            // handler per "Conferma selezione"
             // UNICO handler per "Conferma selezione"
             $(document).on('click', '.btn-conferma', function(e) {
                 e.preventDefault();
@@ -338,9 +295,9 @@
                 const serviceId = $(this).data('service-id');
                 const selectedItems = [];
                 let orderDetails = "";
-                let orderTotal = "";
+                // **RIMUOVI orderTotal**
+
                 // **LOGICA PER CAMBIARE LA LABEL DEL FORM **
-                // Trova il servizio corrente
                 const currentService = services.find(s => s.id == serviceId);
                 const serviceName = currentService ? currentService.name.toLowerCase() : '';
 
@@ -353,6 +310,7 @@
                     $('.form-label[for="room_number"]').text('Numero Ombrellone');
                     $('#room_number').attr('placeholder', 'Es. A1');
                 }
+
                 // Seleziona solo item con checkbox spuntati
                 $(`#details-${serviceId} .menu-checkbox:checked`).each(function() {
                     const checkbox = $(this);
@@ -361,21 +319,18 @@
                         `#details-${serviceId} .quantity-input[data-item-id="${itemId}"]`);
                     const quantity = parseInt(qtyInput.val());
                     const itemName = checkbox.closest('li').find('strong').text();
-                    const itemPrice = checkbox.closest('li').find('.menu-item-price').text();
+                    // **RIMUOVI itemPrice**
 
                     if (quantity > 0) {
-                        let parsedPrice = parseFloat(
-                            itemPrice.replace('€', '').replace('.', '').replace(',', '.')
-                        );
-
                         selectedItems.push({
                             id: itemId,
                             quantity: quantity,
-                            name: itemName,
-                            price: parsedPrice
+                            name: itemName
+                            // **RIMUOVI price: parsedPrice**
                         });
 
-                        orderDetails += `${quantity}x ${itemName} - ${itemPrice}\n`;
+                        // **RIMUOVI PREZZO da orderDetails**
+                        orderDetails += `${quantity}x ${itemName}\n`;
                     }
                 });
 
@@ -384,22 +339,22 @@
                     return false;
                 }
 
-                // Calcola il totale
-                const total = selectedItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-                orderTotal = `\nTOTALE: €${total.toFixed(2).toString().replace('.', ',')}`;
-
+                // **RIMUOVI tutto il calcolo del totale**
+                // const total = selectedItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+                // orderTotal = `\nTOTALE: €${total.toFixed(2).toString().replace('.', ',')}`;
 
                 // Popola campo order_details + hidden inputs
                 $('#order_details').val(orderDetails);
-                $('#orderTotal').append(orderTotal);
+                // **RIMUOVI questa riga**
+                // $('#orderTotal').append(orderTotal);
 
                 $('#hidden-items-container').empty();
 
                 selectedItems.forEach(function(item, index) {
                     $('#hidden-items-container').append(`
-                <input type="hidden" name="items[${index}][id]" value="${item.id}">
-                <input type="hidden" name="items[${index}][quantity]" value="${item.quantity}">
-            `);
+            <input type="hidden" name="items[${index}][id]" value="${item.id}">
+            <input type="hidden" name="items[${index}][quantity]" value="${item.quantity}">
+        `);
                 });
 
                 console.log("SelectedItems:", selectedItems);
@@ -408,7 +363,6 @@
                 // Mostra la modale
                 orderModal.show();
             });
-
             // Handler per invio form - versione DEBUG
             $('#order-form').on('submit', function(e) {
 

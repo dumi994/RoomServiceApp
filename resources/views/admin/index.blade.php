@@ -113,11 +113,27 @@
                                         <h2>Ordine #${order.id}</h2>
                                         <span class="update-status status ${badgeClass}" data-id="${order.id}" data-status="${order.status}">${orderStatus[order.status]}</span>
                                     </div>
-                                    <div class="order-body">
-                                        <p><strong>Cliente:</strong> ${order.first_name} ${order.last_name}</p>
-                                        <p><strong>Camera:</strong> ${order.room_number}</p>
-                                         <p><strong>Servizio:</strong> ${serviceType}</p>
-                                        <p><strong>Ordine:</strong> ${order.order_details}</p>
+                                    <div class="order-body pr-3">
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <p><strong>Ospite: <br></strong> ${order.first_name} ${order.last_name}</p>
+                                            </div>
+                                           
+                                        </div>   
+                                        <div class="row">
+                                             <div class="col-9">
+                                                <p><strong>Servizio: <br></strong> ${serviceType}</p>
+                                            </div>
+                                             <div class="col-3">
+                                                <p><strong>Camera: <br></strong> ${order.room_number}</p>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+
+                                            <div class="col-12">
+                                                <p><strong>Ordine: <br></strong>${order.order_details}</p>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

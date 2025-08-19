@@ -354,3 +354,8 @@ input:checked + .slider:before {
 .slider.round:before {
   border-radius: 50%;
 }
+
+textarea[readonly] {
+  background-color: #f8f9fa !important;
+  cursor: not-allowed;
+}

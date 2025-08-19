@@ -33,20 +33,18 @@ class ServiceMenuItemController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'service_id' => 'nullable|exists:services,id',
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
             'price' => 'required|numeric',
         ]);
+        $data['service_id'] = 1;
+        // Crea il menu item direttamente
+        ServiceMenuItem::create($data);
 
-        $service = Service::findOrFail($data['service_id']);
-        $service->menu_items()->create($data);
-
-        return redirect()->route('dashboard.menu.index', $service->id)
+        // Redirect senza service->id
+        return redirect()->route('dashboard.menu.index')
             ->with('success', 'Voce menu aggiunta!');
     }
-
-
     /**
      * Display the specified resource.
      */
@@ -69,13 +67,13 @@ class ServiceMenuItemController extends Controller
      */
     public function update(Request $request, ServiceMenuItem $menu)
     {
+        // dd($request->all());
         $data = $request->validate([
             'name' => 'nullable|string|max:255',
             'description' => 'nullable|string',
             'price' => 'required|numeric',
-            'service_id' => 'required|exists:services,id',
         ]);
-
+        $data['service_id'] = null;
         $menu->update($data);
 
         return redirect()->route('dashboard.menu.index')->with('success', 'Voce menu aggiornata!');
