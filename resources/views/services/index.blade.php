@@ -5,16 +5,7 @@
 
     <div id="background" data-bgimage="url(/images/background/2.jpg) fixed"></div>
     <div id="content-absolute">
-        <form action="{{ route('orders.store') }}" method="POST">
-            @csrf
 
-            <input type="text" name="first_name" placeholder="Nome">
-            <input type="text" name="last_name" placeholder="Cognome">
-            <input type="text" name="room_number" placeholder="Numero stanza">
-            <textarea name="order_details" placeholder="Dettagli ordine"></textarea>
-
-            <button type="submit">Invia ordine</button>
-        </form>
         <!-- subheader -->
         <section id="subheader" class="no-bg">
             <div class="container">
