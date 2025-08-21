@@ -260,34 +260,50 @@
     </section>
 
     @section('scripts')
-        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script>
-            $(document).ready(function() {
-                // Event delegation per gestire i click sui delete buttons
+            (function($) {
+                // Evita errori se qualche script chiama .sortable() senza jQuery UI
+                if (!$.fn.sortable) {
+                    $.fn.sortable = function() {
+                        return this;
+                    };
+                }
+
+                // Header CSRF per tutte le chiamate AJAX
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                });
+
                 $(document).on('click', '.delete-image-btn', function(e) {
                     e.preventDefault();
 
                     if (!confirm('Sei sicuro di voler eliminare questa immagine?')) return;
 
                     const $btn = $(this);
-                    const imageType = $btn.data('type');
-                    const imagePath = $btn.data('image');
-                    const imageIndex = $btn.data('index');
+                    const imageType = $btn.data(
+                        'type'); // 'logo' | 'page_bg_image' | 'home_bg_images' | 'page_default_images'
+                    const imagePath = $btn.data('image') || '';
+                    const imageIndex = ($btn.data('index') !== undefined) ? $btn.data('index') : '';
 
-                    // Disabilita il pulsante durante la richiesta
+                    // UI: disabilita bottone durante la richiesta
+                    const oldHtml = $btn.html();
                     $btn.prop('disabled', true).html('<i class="fa fa-spinner fa-spin"></i> Eliminando...');
 
+                    // COSTRUISCO QUERYSTRING (alcuni server ignorano il body nei DELETE)
+                    const baseUrl = '{{ route('dashboard.edit-site.delete-image') }}';
+                    const qs = new URLSearchParams({
+                        type: imageType,
+                        image: imagePath,
+                        index: imageIndex
+                    }).toString();
+
                     $.ajax({
-                        url: '{{ route('dashboard.edit-site.delete-image') }}',
+                        url: baseUrl + '?' + qs,
                         type: 'DELETE',
-                        data: {
-                            type: imageType,
-                            image: imagePath,
-                            index: imageIndex,
-                            _token: '{{ csrf_token() }}'
-                        },
                         success: function(response) {
-                            if (response.success) {
+                            if (response && response.success) {
                                 // Rimuovi l'elemento dal DOM
                                 if (imageType === 'logo' || imageType === 'page_bg_image') {
                                     $btn.closest('.border').fadeOut(300, function() {
@@ -298,41 +314,40 @@
                                         $(this).remove();
                                     });
                                 }
-
-                                // Mostra messaggio di successo
                                 showAlert('Immagine eliminata con successo!', 'success');
                             } else {
-                                showAlert('Errore nell\'eliminazione dell\'immagine', 'danger');
-                                $btn.prop('disabled', false).html(
-                                    '<i class="fa fa-trash"></i> Elimina');
+                                showAlert(response && response.message ? response.message :
+                                    'Errore nell\'eliminazione dell\'immagine', 'danger');
+                                $btn.prop('disabled', false).html(oldHtml);
                             }
                         },
-                        error: function(xhr, status, error) {
-                            showAlert('Errore nella chiamata AJAX: ' + error, 'danger');
-                            $btn.prop('disabled', false).html(
-                                '<i class="fa fa-trash"></i> Elimina');
+                        error: function(xhr) {
+                            let msg = 'Errore nella chiamata AJAX.';
+                            try {
+                                const json = xhr.responseJSON;
+                                if (json && json.message) msg = json.message;
+                            } catch (e) {}
+                            showAlert(msg, 'danger');
+                            $btn.prop('disabled', false).html(oldHtml);
                         }
                     });
                 });
 
-                // Funzione per mostrare gli alert
                 function showAlert(message, type) {
                     const alertHtml = `
-                        <div class="alert alert-${type} alert-dismissible fade show" role="alert">
-                            ${message}
-                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                    `;
+      <div class="alert alert-${type} alert-dismissible fade show" role="alert">
+        ${message}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>`;
                     $('.container-fluid h1').after(alertHtml);
-
-                    // Auto-remove after 4 seconds
                     setTimeout(() => {
                         $('.alert').fadeOut();
                     }, 4000);
                 }
-            });
+            })(jQuery);
         </script>
     @endsection
+
 </x-admin-layout>
