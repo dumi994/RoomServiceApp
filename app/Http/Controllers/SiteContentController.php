@@ -37,7 +37,7 @@ class SiteContentController extends Controller
     {
         $content = SiteContent::first() ?: new SiteContent();
 
-        // 🔹 Campi testuali
+
         $content->home_title              = $request->home_title;
         $content->home_title_en           = $request->home_title_en;
         $content->home_button             = $request->home_button;
@@ -56,7 +56,7 @@ class SiteContentController extends Controller
         $disk  = 'public';
         $limit = 2;
 
-        // 🔹 LOGO (singolo - sostituisce se inviato)
+        // LOGO  
         if ($request->hasFile('logo')) {
             if (!empty($content->logo) && Storage::disk($disk)->exists($content->logo)) {
                 Storage::disk($disk)->delete($content->logo);
@@ -67,7 +67,7 @@ class SiteContentController extends Controller
             $content->logo = $path;
         }
 
-        // 🔹 PAGE BG IMAGE (singolo - sostituisce se inviato)
+        // PAGE BG IMAGE  
         if ($request->hasFile('page_bg_image')) {
             if (!empty($content->page_bg_image) && Storage::disk($disk)->exists($content->page_bg_image)) {
                 Storage::disk($disk)->delete($content->page_bg_image);
@@ -114,19 +114,19 @@ class SiteContentController extends Controller
             return json_encode($existing);
         };
 
-        // 🔹 HOME BACKGROUND IMAGES (append prima, poi replace; MAX 2)
+        // HOME BACKGROUND IMAGES (append prima, poi replace; MAX 2)
         if ($request->hasFile('home_bg_images')) {
             $files = $request->file('home_bg_images');
             $content->home_bg_images = $processImages($content->home_bg_images, $files, 'site_data/home_bg_images');
         }
 
-        // 🔹 PAGE DEFAULT IMAGES (append prima, poi replace; MAX 2)
+        // PAGE DEFAULT IMAGES (append prima, poi replace; MAX 2)
         if ($request->hasFile('page_default_images')) {
             $files = $request->file('page_default_images');
             $content->page_default_images = $processImages($content->page_default_images, $files, 'site_data/page_default_images');
         }
 
-        // 🔹 Fallback NOT NULL
+        // Fallback NOT NULL
         if ($content->logo === null)               $content->logo = '';
         if ($content->page_bg_image === null)      $content->page_bg_image = '';
         if ($content->home_bg_images === null)     $content->home_bg_images = json_encode([]);

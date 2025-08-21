@@ -3,7 +3,10 @@
     <!-- menu overlay close -->
     <div id="app"></div>
 
-    <div id="background" data-bgimage="url(/images/background/2.jpg) fixed"></div>
+    <div id="background"
+        data-bgimage="url('{{ $site_data && $site_data->page_bg_image ? asset('storage/' . $site_data->page_bg_image) : asset('images/background/2.jpg') }}') fixed">
+    </div>
+
     <div id="content-absolute">
 
         <!-- subheader -->
@@ -11,8 +14,8 @@
             <div class="container">
                 <div class="row">
                     <div class="col-md-12 text-center">
-                        <h4>Noi Siamo</h4>
-                        <h1>L'Andana Resort</h1>
+                        <h4>{{ $site_data->page_header_subtitle }}</h4>
+                        <h1>{{ $site_data->page_header_title }}</h1>
                     </div>
                 </div>
             </div>
@@ -33,15 +36,12 @@
 
                     <div class="col-lg-6 wow fadeIn">
                         <div class="padding20">
-                            <h2 class="title mb10">L'esperienza di lusso
-                                <br>Tutta da ricordare
+                            <h2 class="title mb10">{{ $site_data->page_h1 }}
                                 <span class="small-border"></span>
                             </h2>
 
-                            <p>Il servizio in camera e in piscina de L'Andana Resort offre un'esperienza esclusiva e
-                                curata nei minimi dettagli, permettendo agli ospiti di gustare piatti e bevande di alta
-                                qualità direttamente nel comfort della propria camera o a bordo piscina, in un'atmosfera
-                                rilassante e raffinata.
+                            <p>
+                                {{ $site_data->page_description }}
                             </p>
 
                         </div>
@@ -54,7 +54,7 @@
 
                 <div class="row gx-4">
                     <div class="col-lg-12 text-center">
-                        <h2 class="title center">Hotel Facilities
+                        <h2 class="title center">{{ $site_data->page_service_name }}
                             <span class="small-border"></span>
                         </h2>
                     </div>
@@ -203,10 +203,14 @@
         var services = @json($services);
 
         $(document).ready(function() {
-            const defaultImgs = [
-                '/images/misc/1.jpg',
-                '/images/misc/2.jpg'
-            ];
+
+            // Converte la stringa JSON in array, altrimenti fallback
+            const defaultImgs = @json(
+                $site_data && $site_data->page_default_images
+                    ? json_decode($site_data->page_default_images, true)
+                    : ['/images/misc/1.jpg', '/images/misc/2.jpg']
+            );
+
             //funzione per chiudere modale
             function closeModal() {
                 $('#exampleModal').modal('hide');

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Service;
-
+use App\Models\SiteContent;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -17,17 +17,18 @@ class ServiceController extends Controller
         $services = Service::with('menu_items')
             ->where('available', 1)
             ->get();
+        $site_data = SiteContent::first();
 
         //return response()->json($services);
         //$services = Service::all();
 
-        return view('services.index', compact('services'));
+        return view('services.index', compact('services', 'site_data'));
     }
-    public function adminIndex()
+    /*  public function adminIndex()
     {
         $services = Service::all(); // prendi tutti i servizi
         return view('admin.service.index', compact('services'));
-    }
+    } */
     /**
      * Store a newly created resource in storage.
      */

@@ -1,3 +1,5 @@
+@props(['site_data' => null])
+
 <!DOCTYPE html>
 <html lang="it">
 
@@ -66,42 +68,50 @@
     <script src='{{ asset('js/supersized/js/supersized.3.2.7.js') }}'></script>
     <script src='{{ asset('js/supersized/theme/supersized.shutter.min.js') }}'></script>
     <style>
-        #prevslide,
+        /*    #prevslide,
         #nextslide,
         #pauseplay {
             display: none !important;
-        }
+        } */
     </style>
     <script>
+        var siteData = @json($site_data)
+
         jQuery(function($) {
             // Lista tutti gli elementi visibili (display non none e opacity > 0)
             /*   Array.from(document.querySelectorAll('*')).filter(el => {
                   const style = window.getComputedStyle(el);
                   return style.display !== 'none' && style.opacity !== '0';
               }).forEach(el => console.log(el, el.className)); */
-
+            // Passo l'oggetto PHP a JS
             var slides = [];
-            slides.push({
-                image: "{{ asset('images/slider/Gianni_Buonsante_DRO_0411.jpg') }}",
+            @php
+                $homeImages = json_decode($site_data->home_bg_images ?? '[]', true);
+            @endphp
 
-                title: "<div class='slider-text'><h2 class='wow fadeInUp'>Relax</h2><a class='btn-line wow fadeInUp' data-wow-delay='.3s' href='/services'><span>Benessere & Servizi</span></a></div>",
-                thumb: '',
-                url: ''
-            });
+            @foreach ($homeImages as $img)
+                slides.push({
+                    image: "{{ asset('storage/' . $img) }}",
+                    title: "<div class='slider-text'><h2 class='wow fadeInUp'>" + siteData.home_title +
+                        "</h2><a class='btn-line wow fadeInUp' data-wow-delay='.3s' href='/services'><span>" +
+                        siteData.home_button + "</span></a></div>",
+                    thumb: '',
+                    url: ''
+                });
+            @endforeach
 
-            /*   slides.push({
-                  image: '{{ asset('images/slider/2.jpg') }}', /
-                  title: "<div class='slider-text'><h2 class='wow fadeInUp'>Comfort</h2><a class='btn-line wow fadeInUp' data-wow-delay='.3s' href='room-2-cols.html'><span>Choose Room</span></a></div>",
-                  thumb: '',
-                  url: ''
-              });
+            // Fallback se non ci sono immagini
+            @if (empty($homeImages))
+                slides.push({
+                    image: "{{ asset('images/slider/Gianni_Buonsante_DRO_0411.jpg') }}",
+                    title: "<div class='slider-text'><h2 class='wow fadeInUp'>" + siteData.home_title +
+                        "</h2><a class='btn-line wow fadeInUp' data-wow-delay='.3s' href='/services'><span>" +
+                        siteData.home_button + "</span></a></div>",
+                    thumb: '',
+                    url: ''
+                });
+            @endif
 
-              slides.push({
-                  image: '{{ asset('images/slider/3.jpg') }}', /
-                  title: "<div class='slider-text'><h2 class='wow fadeInUp'>Happy</h2><a class='btn-line wow fadeInUp' data-wow-delay='.3s' href='about.html'><span>Our Facilities</span></a></div>",
-                  thumb: '',
-                  url: ''
-              }); */
 
 
             $.supersized({

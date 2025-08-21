@@ -8,9 +8,12 @@ use App\Http\Controllers\SiteContentController;
 
 use App\Models\Service;
 use App\Http\Controllers\Admin\ServiceController as AdminServiceController;
+use App\Models\SiteContent;
 
 Route::get('/', function () {
-    return view('home');
+    $site_data = SiteContent::first();
+    /*     dd($site_data); */
+    return view('home', compact('site_data'));
 });
 
 // Frontend
