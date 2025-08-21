@@ -6,5 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class SiteContent extends Model
 {
-    protected $table = 'site_content'; // <- qui il nome corretto
+    protected $table = 'site_content';
+    protected $casts = [
+        'home_bg_images' => 'array',
+        'page_default_images' => 'array',
+    ];
 }

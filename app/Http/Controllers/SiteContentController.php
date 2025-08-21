@@ -4,8 +4,6 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\SiteContent;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Validator;
 
 class SiteContentController extends Controller
 {
@@ -14,8 +12,7 @@ class SiteContentController extends Controller
      */
     public function index()
     {
-        $site_data = SiteContent::first();
-
+        $site_data =  SiteContent::first();
         return view('admin.site_content.index', compact('site_data'));
     }
 
@@ -24,84 +21,98 @@ class SiteContentController extends Controller
      */
     public function create()
     {
-        // Passo null, così la view capisce che è creazione
-        $site_data = null;
-        return view('admin.site_content.index', compact('site_data'));
+        // passo null, così la view capisce che è creazione
+        return view('admin.site_content.index')->with('site_data', null);
     }
 
     /**
      * Store a newly created resource in storage.
      */
+    /*  public function store(Request $request)
+    {
+        dd($request->all());
+    } */
     public function store(Request $request)
     {
-        // Validazione
-        $validator = Validator::make($request->all(), [
-            'home_title' => 'nullable|string|max:500',
-            'home_title_en' => 'nullable|string|max:500',
-            'home_button' => 'nullable|string|max:100',
-            'home_button_en' => 'nullable|string|max:100',
-            'page_header_title' => 'nullable|string|max:500',
-            'page_header_title_en' => 'nullable|string|max:500',
-            'page_header_subtitle' => 'nullable|string|max:500',
-            'page_header_subtitle_en' => 'nullable|string|max:500',
-            'page_h1' => 'nullable|string|max:200',
-            'page_h1_en' => 'nullable|string|max:200',
-            'page_description' => 'nullable|string',
-            'page_description_en' => 'nullable|string',
-            'page_service_name' => 'nullable|string|max:200',
-            'page_service_name_en' => 'nullable|string|max:200',
-            'logo' => 'nullable|image|mimes:jpg,jpeg,png,gif,svg|max:2048',
-            'home_bg_images.*' => 'nullable|image|mimes:jpg,jpeg,png,gif|max:2048',
-            'page_bg_image' => 'nullable|image|mimes:jpg,jpeg,png,gif|max:2048',
-            'page_default_images.*' => 'nullable|image|mimes:jpg,jpeg,png,gif|max:2048',
-        ]);
-
-        if ($validator->fails()) {
-            return redirect()->back()
-                ->withErrors($validator)
-                ->withInput();
+        $content = SiteContent::first();
+        if (!$content) {
+            $content = new SiteContent();
         }
 
-        try {
-            // Trova il primo record o crea nuovo
-            $content = SiteContent::first();
-            if (!$content) {
-                $content = new SiteContent();
+
+        $content->home_title = $request->home_title;
+        $content->home_title_en = $request->home_title_en;
+        $content->home_button = $request->home_button;
+        $content->home_button_en = $request->home_button_en;
+        $content->page_header_title = $request->page_header_title;
+        $content->page_header_title_en = $request->page_header_title_en;
+        $content->page_header_subtitle = $request->page_header_subtitle;
+        $content->page_header_subtitle_en = $request->page_header_subtitle_en;
+        $content->page_h1 = $request->page_h1;
+        $content->page_h1_en = $request->page_h1_en;
+        $content->page_description = $request->page_description;
+        $content->page_description_en = $request->page_description_en;
+        $content->page_service_name = $request->page_service_name;
+        $content->page_service_name_en = $request->page_service_name_en;
+        $content->home_bg_images = $request->home_bg_images;
+        $content->page_default_images = $request->page_default_images;
+
+
+        //GESTIONE iMMAGINI
+        $disk = 'public';
+
+        //LOGO
+        $logo_folder = "site_data/logo";
+
+        if ($request->hasFile('logo')) {
+            $file = $request->file('logo');
+            $filename = $file->getClientOriginalName();
+            $path = $file->storeAs($logo_folder, $filename, $disk);
+            $content->logo = $path;
+        }
+
+
+        //BACKGROUND HOME
+        $home_bg_folder = "site_data/home_bg_images";
+        if ($request->hasFile('home_bg_images')) {
+            $homeImages = [];
+            foreach ($request->file('home_bg_images') as $file) {
+                $filename = $file->getClientOriginalName();
+                $path = $file->storeAs($home_bg_folder, $filename, $disk);
+                $homeImages[] = $path;
             }
-
-            // Aggiorna i campi di testo
-            $content->fill($request->only([
-                'home_title',
-                'home_title_en',
-                'home_button',
-                'home_button_en',
-                'page_header_title',
-                'page_header_title_en',
-                'page_header_subtitle',
-                'page_header_subtitle_en',
-                'page_h1',
-                'page_h1_en',
-                'page_description',
-                'page_description_en',
-                'page_service_name',
-                'page_service_name_en'
-            ]));
-
-            // Gestione immagini
-            $this->handleImageUploads($request, $content);
-
-            $content->save();
-
-            $message = $content->wasRecentlyCreated ?
-                'Contenuto creato correttamente!' :
-                'Contenuto aggiornato correttamente!';
-
-            return redirect()->back()->with('success', $message);
-        } catch (\Exception $e) {
-            return redirect()->back()
-                ->with('error', 'Errore durante il salvataggio: ' . $e->getMessage())
-                ->withInput();
+            $content->home_bg_images = json_encode($homeImages);
         }
+
+        // PAGE BG IMAGE (singolo file)
+        $page_bg_folder = "site_data/page_bg";
+        if ($request->hasFile('page_bg_image')) {
+            $file = $request->file('page_bg_image');
+            $filename = $file->getClientOriginalName();
+            $path = $file->storeAs($page_bg_folder, $filename, $disk);
+            $content->page_bg_image = $path;
+        }
+
+        // PAGE DEFAULT IMAGES (array di file)
+        $page_default_folder = "site_data/page_default_images";
+        if ($request->hasFile('page_default_images')) {
+            $default_paths = [];
+            foreach ($request->file('page_default_images') as $file) {
+                $filename = $file->getClientOriginalName();
+                $path = $file->storeAs($page_default_folder, $filename, $disk);
+                $default_paths[] = $path;
+            }
+            $content->page_default_images = json_encode($default_paths);
+        }
+        $content->save();
+        return redirect()->back()->with('success', 'Contenuto aggiornato correttamente!');
+    }
+    /**
+     * Display the specified resource.
+     */
+    public function show(string $id)
+    {
+        //
     }
 
     /**
@@ -110,8 +121,9 @@ class SiteContentController extends Controller
     public function edit()
     {
         // Prendi il primo record o null
-        $site_data = SiteContent::first();
-        return view('admin.site_content.index', compact('site_data'));
+        $content = SiteContent::first();
+
+        return view('admin.site_content.form', compact('site_data'));
     }
 
     /**
@@ -119,8 +131,7 @@ class SiteContentController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        // Reindirizza al metodo store che gestisce sia create che update
-        return $this->store($request);
+        //
     }
 
     /**
@@ -128,141 +139,6 @@ class SiteContentController extends Controller
      */
     public function destroy(string $id)
     {
-        try {
-            $content = SiteContent::findOrFail($id);
-
-            // Elimina tutte le immagini associate
-            $this->deleteAllImages($content);
-
-            $content->delete();
-
-            return redirect()->route('admin.site-content.index')
-                ->with('success', 'Contenuto eliminato correttamente!');
-        } catch (\Exception $e) {
-            return redirect()->back()
-                ->with('error', 'Errore durante l\'eliminazione: ' . $e->getMessage());
-        }
-    }
-
-    /**
-     * Gestisce l'upload di tutte le immagini
-     */
-    private function handleImageUploads(Request $request, SiteContent $content)
-    {
-        $disk = 'public';
-
-        // LOGO
-        if ($request->hasFile('logo')) {
-            // Elimina il vecchio logo se esiste
-            if ($content->logo && Storage::disk($disk)->exists($content->logo)) {
-                Storage::disk($disk)->delete($content->logo);
-            }
-
-            $content->logo = $this->storeImage(
-                $request->file('logo'),
-                'site_data/logo',
-                $disk
-            );
-        }
-
-        // BACKGROUND HOME (multipli)
-        if ($request->hasFile('home_bg_images')) {
-            // Elimina le vecchie immagini se esistono
-            if ($content->home_bg_images) {
-                $oldImages = json_decode($content->home_bg_images, true) ?: [];
-                foreach ($oldImages as $oldImage) {
-                    if (Storage::disk($disk)->exists($oldImage)) {
-                        Storage::disk($disk)->delete($oldImage);
-                    }
-                }
-            }
-
-            $homeImages = [];
-            foreach ($request->file('home_bg_images') as $file) {
-                $homeImages[] = $this->storeImage($file, 'site_data/home_bg_images', $disk);
-            }
-            $content->home_bg_images = json_encode($homeImages);
-        }
-
-        // PAGE BG IMAGE (singolo)
-        if ($request->hasFile('page_bg_image')) {
-            // Elimina la vecchia immagine se esiste
-            if ($content->page_bg_image && Storage::disk($disk)->exists($content->page_bg_image)) {
-                Storage::disk($disk)->delete($content->page_bg_image);
-            }
-
-            $content->page_bg_image = $this->storeImage(
-                $request->file('page_bg_image'),
-                'site_data/page_bg',
-                $disk
-            );
-        }
-
-        // PAGE DEFAULT IMAGES (multipli)
-        if ($request->hasFile('page_default_images')) {
-            // Elimina le vecchie immagini se esistono
-            if ($content->page_default_images) {
-                $oldImages = json_decode($content->page_default_images, true) ?: [];
-                foreach ($oldImages as $oldImage) {
-                    if (Storage::disk($disk)->exists($oldImage)) {
-                        Storage::disk($disk)->delete($oldImage);
-                    }
-                }
-            }
-
-            $defaultImages = [];
-            foreach ($request->file('page_default_images') as $file) {
-                $defaultImages[] = $this->storeImage($file, 'site_data/page_default_images', $disk);
-            }
-            $content->page_default_images = json_encode($defaultImages);
-        }
-    }
-
-    /**
-     * Salva un'immagine e restituisce il path
-     */
-    private function storeImage($file, $folder, $disk)
-    {
-        // Genera un nome file unico per evitare conflitti
-        $filename = time() . '_' . $file->getClientOriginalName();
-        return $file->storeAs($folder, $filename, $disk);
-    }
-
-    /**
-     * Elimina tutte le immagini associate al contenuto
-     */
-    private function deleteAllImages(SiteContent $content)
-    {
-        $disk = 'public';
-
-        // Logo
-        if ($content->logo && Storage::disk($disk)->exists($content->logo)) {
-            Storage::disk($disk)->delete($content->logo);
-        }
-
-        // Home background images
-        if ($content->home_bg_images) {
-            $images = json_decode($content->home_bg_images, true) ?: [];
-            foreach ($images as $image) {
-                if (Storage::disk($disk)->exists($image)) {
-                    Storage::disk($disk)->delete($image);
-                }
-            }
-        }
-
-        // Page background image
-        if ($content->page_bg_image && Storage::disk($disk)->exists($content->page_bg_image)) {
-            Storage::disk($disk)->delete($content->page_bg_image);
-        }
-
-        // Page default images
-        if ($content->page_default_images) {
-            $images = json_decode($content->page_default_images, true) ?: [];
-            foreach ($images as $image) {
-                if (Storage::disk($disk)->exists($image)) {
-                    Storage::disk($disk)->delete($image);
-                }
-            }
-        }
+        //
     }
 }

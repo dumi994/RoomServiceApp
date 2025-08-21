@@ -28,6 +28,8 @@ Route::prefix('dashboard')->name('dashboard.')->group(function () {
     Route::resource('/site-content', SiteContentController::class)
         ->names('edit-site')
         ->only(['index', 'store', 'update']);
+    Route::delete('/site-content/delete-image', [SiteContentController::class, 'deleteImage'])
+        ->name('edit-site.delete-image');
 
     Route::post('/services/{service}/upload-images', [AdminServiceController::class, 'uploadImages'])
         ->name('services.upload.images');
