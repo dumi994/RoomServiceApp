@@ -4,6 +4,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ServiceMenuItemController;
+use App\Http\Controllers\SiteContentController;
+
 use App\Models\Service;
 use App\Http\Controllers\Admin\ServiceController as AdminServiceController;
 
@@ -23,6 +25,9 @@ Route::prefix('dashboard')->name('dashboard.')->group(function () {
 
     Route::resource('/menu', ServiceMenuItemController::class)->names('menu');
     Route::resource('/services', AdminServiceController::class)->names('services');
+    Route::resource('/site-content', SiteContentController::class)
+        ->names('edit-site')
+        ->only(['index', 'store', 'update']);
 
     Route::post('/services/{service}/upload-images', [AdminServiceController::class, 'uploadImages'])
         ->name('services.upload.images');
