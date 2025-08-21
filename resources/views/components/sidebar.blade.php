@@ -7,6 +7,7 @@
             @php
                 $currentRoute = request()->route()->getName(); // o request()->path()
             @endphp
+
             <li class="nav-item">
                 <a href="{{ url('/dashboard') }}" class="nav-link {{ request()->is('dashboard') ? 'active' : '' }}">
                     <i class="nav-icon fas fa-shopping-cart"></i>
@@ -64,7 +65,13 @@
                     </li>
                 </ul>
             </li>
-
+            <li class="nav-item">
+                <a href="{{ url('/dashboard/site-content') }}"
+                    class="nav-link {{ request()->is('dashboard/site-content') ? 'active' : '' }}">
+                    <i class="nav-icon fas fa-pager"></i>
+                    <p>App Content</p>
+                </a>
+            </li>
         </ul>
     </nav>
     <!-- /.sidebar-menu -->
