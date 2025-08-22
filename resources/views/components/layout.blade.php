@@ -76,7 +76,21 @@
     </style>
     <script>
         var siteData = @json($site_data)
+        const logo = @json($site_data->logo ?? null);
 
+        // Se c'è logo -> uso quello, altrimenti fallback
+        const overlayLogo = logo ?
+            "{{ asset('storage') }}/" + logo :
+            "{{ asset('images/icon.png') }}";
+
+        $(document).ready(function() {
+            $("#jpreOverlay").css({
+                "background": `url(${overlayLogo}) center no-repeat rgba(var(--bg-dark-color),1)`,
+                "position": "absolute",
+                "width": "100%",
+                "height": "100%"
+            });
+        });
         jQuery(function($) {
             // Lista tutti gli elementi visibili (display non none e opacity > 0)
             /*   Array.from(document.querySelectorAll('*')).filter(el => {
@@ -92,26 +106,28 @@
             @foreach ($homeImages as $img)
                 slides.push({
                     image: "{{ asset('storage/' . $img) }}",
-                    title: "<div class='slider-text'><h2 class='wow fadeInUp'>" + siteData.home_title +
+                    title: "<div class='slider-text'><h2 class='wow fadeInUp'>" +
+                        (siteData?.home_title || "Lorem Ipsum") +
                         "</h2><a class='btn-line wow fadeInUp' data-wow-delay='.3s' href='/services'><span>" +
-                        siteData.home_button + "</span></a></div>",
+                        (siteData?.home_button || "Scopri di più") +
+                        "</span></a></div>",
                     thumb: '',
                     url: ''
                 });
             @endforeach
 
-            // Fallback se non ci sono immagini
             @if (empty($homeImages))
                 slides.push({
-                    image: "{{ asset('images/slider/Gianni_Buonsante_DRO_0411.jpg') }}",
-                    title: "<div class='slider-text'><h2 class='wow fadeInUp'>" + siteData.home_title +
+                    image: "{{ asset('images/background/1.jpg') }}",
+                    title: "<div class='slider-text'><h2 class='wow fadeInUp'>" +
+                        (siteData?.home_title || "Lorem Ipsum") +
                         "</h2><a class='btn-line wow fadeInUp' data-wow-delay='.3s' href='/services'><span>" +
-                        siteData.home_button + "</span></a></div>",
+                        (siteData?.home_button || "Scopri di più") +
+                        "</span></a></div>",
                     thumb: '',
                     url: ''
                 });
             @endif
-
 
 
             $.supersized({

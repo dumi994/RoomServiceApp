@@ -4,7 +4,7 @@
             <div class="col-lg-8 text-center">
                 <div class="py-5">
                     <div class="mb-4">
-                        <img src="images/logo-andana.webp" alt="Logo Andana" style="max-width: 200px;" />
+                        <img src="{{ $site_data->logo }}" alt="Logo Andana" style="max-width: 200px;" />
                     </div>
                     <h2 class="title mb-4">Grazie per il tuo ordine!</h2>
                     <div class="alert alert-success">

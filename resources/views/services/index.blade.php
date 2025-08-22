@@ -14,8 +14,8 @@
             <div class="container">
                 <div class="row">
                     <div class="col-md-12 text-center">
-                        <h4>{{ $site_data->page_header_subtitle }}</h4>
-                        <h1>{{ $site_data->page_header_title }}</h1>
+                        <h4>{{ $site_data->page_header_subtitle ?? 'Lorem ipsum' }}</h4>
+                        <h1>{{ $site_data->page_header_title ?? 'Lorem ipsum dolor sit.' }}</h1>
                     </div>
                 </div>
             </div>
@@ -36,12 +36,12 @@
 
                     <div class="col-lg-6 wow fadeIn">
                         <div class="padding20">
-                            <h2 class="title mb10">{{ $site_data->page_h1 }}
+                            <h2 class="title mb10">{{ $site_data->page_h1 ?? 'Lorem ipsum dolor sit amet.' }}
                                 <span class="small-border"></span>
                             </h2>
 
                             <p>
-                                {{ $site_data->page_description }}
+                                {{ $site_data->page_description ?? 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.' }}
                             </p>
 
                         </div>
@@ -54,32 +54,37 @@
 
                 <div class="row gx-4">
                     <div class="col-lg-12 text-center">
-                        <h2 class="title center">{{ $site_data->page_service_name }}
+                        <h2 class="title center">{{ $site_data->page_service_name ?? 'Lorem, ipsum dolor sit.' }}
                             <span class="small-border"></span>
                         </h2>
                     </div>
                 </div>
 
                 <div class="row justify-content-center">
-                    @foreach ($services as $service)
+                    @forelse ($services as $service)
                         <div class="col-md-4 mb-3 d-flex justify-content-center" id="service-id-{{ $service->id }}">
                             <div class="card-bg d-flex justify-content-center flex-column align-items-center"
                                 style="cursor:pointer;">
                                 <span class="custom-icona d-flex align-items-center justify-content-center">
-                                    {!! $service->icon !!}
+                                    {!! $service->icon ?? '<i class="fa fa-question-circle"></i>' !!}
                                 </span>
 
                                 <div class="text mt-4">
-                                    <h3 class="text-center">{{ $service->name }}</h3>
+                                    <h3 class="text-center">{{ $service->name ?? 'Lorem ipsum' }}</h3>
                                 </div>
-                                <p>{{ $service->description ?? 'Detailed information about the service.' }}</p>
+                                <p>{{ $service->description ?? 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.' }}
+                                </p>
                             </div>
                         </div>
-                    @endforeach
+                    @empty
+                        <div class="col-12 text-center">
+                            <p class="text-muted"> servizio disponibile al momento.</p>
+                        </div>
+                    @endforelse
                 </div>
 
                 <div class="row">
-                    @foreach ($services as $service)
+                    @forelse ($services as $service)
                         <div class="col-12 mt-2 service-details d-none" id="details-{{ $service->id }}">
                             <div class="d-flex justify-content-center py-5">
                                 <img src="/images/logo-andana.webp" alt="Logo Andana" />
@@ -124,7 +129,11 @@
                                 @endif
                             </div>
                         </div>
-                    @endforeach
+                    @empty
+                        <div class="col-12 text-center">
+                            <p class="text-muted">Lorem ipsum – Nessun servizio disponibile al momento.</p>
+                        </div>
+                    @endforelse
                 </div>
             </div>
         </section>
