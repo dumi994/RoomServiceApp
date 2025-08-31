@@ -22,7 +22,7 @@
                     @foreach ($service->images as $index => $image)
                         <div class="col-6 existing-image">
                             <div class="edit-service-img shadow rounded"
-                                style="background-image: url('{{ isset($image) ? asset($image) : asset('images/default1.jpg') }}')">
+                                style="background-image: url('{{ isset($image) ? asset('storage/' . ltrim(preg_replace('#^/?storage/#', '', $image), '/')) : asset('images/default1.jpg') }}')">
                                 <span data-index="{{ $index }}" data-image="{{ $image }}"
                                     class="material-symbols-outlined delete-icon">
                                     delete

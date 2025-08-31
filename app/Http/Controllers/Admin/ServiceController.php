@@ -66,7 +66,7 @@ class ServiceController extends Controller
         if ($request->has('menu_item_ids')) {
             $service->menu_items()->sync($request->menu_item_ids);
         }
-        return redirect()->route('services.menu-items.create', $service->id)
+        return redirect()->route('dashboard.menu.create', $service->id)
             ->with('success', 'Service creato! Ora aggiungi le voci menu.');
     }
 
@@ -215,7 +215,7 @@ class ServiceController extends Controller
         // elimina il record
         $service->delete();
 
-        return redirect()->route('admin.services.index')
+        return redirect()->route('dashboard.services.index')
             ->with('success', 'Servizio eliminato con successo');
     }
 }

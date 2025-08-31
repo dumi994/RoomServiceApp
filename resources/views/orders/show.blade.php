@@ -42,7 +42,7 @@
 
                     <div class="tracking-step" data-step="3" id="step-3">
                         <div class="step-circle">🛎️</div>
-                        <div class="step-label">Consegnato</div>
+                        <div class="step-label">Ordine Pronto</div>
                     </div>
                 </div>
 

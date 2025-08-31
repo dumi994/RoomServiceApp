@@ -74,7 +74,7 @@ class ServiceController extends Controller
         $service->images = $finalImages;
         $service->save();
 
-        return redirect()->route('services.menu-items.create', $service->id)
+        return redirect()->route('dashboard.services.menu-items.create', $service->id)
             ->with('success', 'Service creato! Ora aggiungi le voci menu.');
     }
 
