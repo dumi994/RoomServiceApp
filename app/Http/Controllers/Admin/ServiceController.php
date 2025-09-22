@@ -66,7 +66,7 @@ class ServiceController extends Controller
         if ($request->has('menu_item_ids')) {
             $service->menu_items()->sync($request->menu_item_ids);
         }
-        return redirect()->route('dashboard.menu.create', $service->id)
+        return redirect()->route('dashboard.services.create', $service->id)
             ->with('success', 'Service creato! Ora aggiungi le voci menu.');
     }
 

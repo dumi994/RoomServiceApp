@@ -74,7 +74,7 @@ class ServiceController extends Controller
         $service->images = $finalImages;
         $service->save();
 
-        return redirect()->route('dashboard.services.menu-items.create', $service->id)
+        return redirect()->route("dashboard.services.create", $service->id)
             ->with('success', 'Service creato! Ora aggiungi le voci menu.');
     }
 
@@ -200,6 +200,6 @@ class ServiceController extends Controller
         // elimina il record
         $service->delete();
 
-        return redirect()->route('dashboard.services')->with('success', 'Servizio eliminato con successo');
+        return redirect()->route('dashboard.services.index')->with('success', 'Servizio eliminato con successo');
     }
 }
